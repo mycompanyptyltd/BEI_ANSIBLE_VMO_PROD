@@ -8,7 +8,7 @@ This repository contains a collection of Ansible playbooks, roles and accompanyi
 
 The structure of this repository is aligned with the Ansible best practice ([Reference](https://docs.ansible.com/ansible/2.9/user_guide/playbooks_best_practices.html#directory-layout)). The root of the repository contains the following Ansible playbooks:
 
-- [`add_host_to_inventory.yml`](/add_host_to_inventory.yml) - Adds targeted server to temporary server build AWX inventory.
+- [`add_host_to_inventory.yml`](/add_host_to_inventory_vmc_prd.yml) - Adds targeted server to temporary server build AWX inventory.
 - [`add_to_CMDB.yml`](/add_to_CMDB.yml) - Adds new server to ServiceNow CMDB upon a successful build.
 - [`bootstrap_host.yml`](/bootstrap_host.yml) - Configures a host for management by Ansible.
 - [`build_from_template.yml`](/build_from_template.yml) - Provisions a Windows Server 2019 VM from a template to a specified VMware environment.
