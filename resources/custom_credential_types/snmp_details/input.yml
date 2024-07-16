@@ -1,0 +1,14 @@
+---
+
+fields:
+  - id: snmp_write
+    type: string
+    label: SNMP Write Password
+    secret: true
+  - id: snmp_read
+    type: string
+    label: SNMP Read Password
+    secret: true
+required:
+  - snmp_write
+  - snmp_read

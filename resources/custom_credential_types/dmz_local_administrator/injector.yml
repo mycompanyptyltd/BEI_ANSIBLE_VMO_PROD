@@ -1,0 +1,5 @@
+---
+
+extra_vars:
+  dmz_local_admin_name: '{{ username }}'
+  dmz_local_admin_pass: '{{ password }}'

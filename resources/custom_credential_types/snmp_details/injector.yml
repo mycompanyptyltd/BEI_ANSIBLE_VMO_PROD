@@ -1,0 +1,5 @@
+---
+
+extra_vars:
+  snmp_read: '{{ snmp_read }}'
+  snmp_write: '{{ snmp_write }}'
