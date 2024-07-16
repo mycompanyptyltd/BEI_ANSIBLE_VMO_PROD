@@ -1,0 +1,8 @@
+---
+
+- name: Install AD RSAT Tools
+  win_feature:
+    name:
+      - RSAT-AD-AdminCenter
+      - RSAT-AD-PowerShell
+    state: present

@@ -1,0 +1,15 @@
+---
+
+- name: Common Configuration
+  include_tasks:
+    file: common.yml
+
+- name: Corporate-Only Configuration
+  include_tasks:
+    file: corporate.yml
+  when: win_domain_fqdn != "DMZ"
+
+- name: DMZ-Only Configuration
+  include_tasks:
+    file: dmz.yml
+  when: win_domain_fqdn == "DMZ"

@@ -1,0 +1,39 @@
+---
+
+- name: Create SOE Registy Key
+  win_regedit:
+    path: HKLM:\Software\SOE
+    state: present
+
+- name: Write Server Information to Registry
+  win_regedit:
+    name: "{{ item.name }}"
+    data: "{{ item.data }}"
+    path: HKLM:\Software\SOE
+    state: present
+    type: string
+  loop:
+    - name: BuildEngineer
+      data: "{{ build_engineer }}"
+    - name: Chargeable
+      data: "{{ chargeable }}"
+    - name: Commissioned
+      data: "{{ commissioned }}"
+    - name: Custodian
+      data: "{{ custodian }}"
+    - name: JoinDomain
+      data: "{{ win_domain_fqdn }}"
+    - name: PatchCycle
+      data: "{{ patching_group }}"
+    - name: ServerBuildDate
+      data: "{{ vm_build_date }}"
+    - name: ServerDescription
+      data: "{{ server_description }}"
+    - name: TechCustodian
+      data: "{{ tech_custodian }}"
+    - name: Ticket
+      data: "{{ snow_ticket }}"
+    - name: Tier
+      data: "{{ server_tier }}"
+    - name: vCenter
+      data: "{{ vcenter_server | default('N/A') }}"

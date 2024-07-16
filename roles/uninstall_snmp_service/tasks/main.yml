@@ -1,0 +1,14 @@
+---
+
+- name: Uninstall SNMP Service
+  win_feature:
+    include_management_tools: yes
+    include_sub_features: no
+    name: SNMP-Service
+    state: absent
+  register: uninstall_snmp_service_result
+
+- name: Post-Uninstall Reboot
+  win_reboot:
+    pre_reboot_delay: 0
+  when: uninstall_snmp_service_result.reboot_required

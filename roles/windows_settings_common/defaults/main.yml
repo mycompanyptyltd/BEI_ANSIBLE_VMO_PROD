@@ -1,0 +1,14 @@
+---
+
+guest_user_name: SOEGuest2019
+
+net_adapter: Ethernet0
+
+ntp_dmz_onprem: "159.52.224.60 159.52.224.60"
+ntp_dmz_vmc: "169.254.169.123"
+
+server_timezone: W. Australia Standard Time
+
+server_region_format: en-AU
+server_region_location: 12
+server_region_unicode_language: en-AU

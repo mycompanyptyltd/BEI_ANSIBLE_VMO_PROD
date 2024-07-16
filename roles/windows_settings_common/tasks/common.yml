@@ -1,0 +1,103 @@
+---
+#
+#- name: Set Computer Description
+#  win_computer_description:
+#    description: "{{ server_description }}"
+
+- name: Set Computer Description
+  win_shell: |
+    $CompDesc = @{Description = '{{ server_description }}'}
+    Set-CimInstance -Query 'Select * From Win32_OperatingSystem' -Property $CompDesc
+
+- name: Disable NIC Power Saving Feature
+  win_shell: |
+    $NetAdapterPowerManagement = Get-NetAdapter -Physical | Get-NetAdapterPowerManagement | Where-Object -FilterScript { $_.AllowComputerToTurnOffDevice -eq 'Enabled' }
+
+    if ($NetAdapterPowerManagement) {
+      foreach ($Adapter in $NetAdapterPowerManagement) {
+        $Adapter.AllowComputerToTurnOffDevice = 'Disabled'
+        $Adapter | Set-NetAdapterPowerManagement -NoRestart
+      }
+
+      Exit 0
+    }
+
+    Exit 2
+  args:
+    no_profile: yes
+  register: disable_adapter_power_mgmt_result
+  changed_when: disable_adapter_power_mgmt_result.rc != 2
+  failed_when:
+    - disable_adapter_power_mgmt_result.rc != 0
+    - disable_adapter_power_mgmt_result.rc != 2
+
+- name: Disable IPv6
+  win_shell: |
+    if ((Get-NetAdapterBinding -Name '{{ net_adapter }}' -ComponentID ms_tcpip6).Enabled) {
+      Disable-NetAdapterBinding -Name '{{ net_adapter }}' -ComponentID ms_tcpip6
+      Exit 0
+    }
+
+    Exit 2
+  args:
+    no_profile: yes
+  register: disable_ipv6_result
+  changed_when: disable_ipv6_result.rc != 2
+  failed_when:
+    - disable_ipv6_result.rc != 0
+    - disable_ipv6_result.rc != 2
+
+- name: Set Local Guest Account Username
+  win_shell: |
+    if (Get-LocalUser | Where-Object -FilterScript { $_.Name -eq 'Guest' }) {
+      Rename-LocalUser -Name 'Guest' -NewName '{{ guest_user_name }}'
+      Exit 0
+    }
+
+    Exit 2
+  args:
+    no_profile: yes
+  register: set_guest_username_result
+  changed_when: set_guest_username_result.rc != 2
+  failed_when:
+    - set_guest_username_result.rc != 0
+    - set_guest_username_result.rc != 2
+
+- name: Disable UAC
+  win_regedit:
+    data: 0
+    name: EnableLUA
+    path: HKLM:\Software\Microsoft\Windows\CurrentVersion\policies\system
+    state: present
+    type: dword
+
+- name: Set Regional Options
+  win_region:
+    copy_settings: yes
+    format: "{{ server_region_format }}" # From role defaults
+    location: "{{ server_region_location }}" # From role defaults
+    unicode_language: "{{ server_region_unicode_language }}" # From role defaults
+  register: region_result
+
+- name: Set Timezone
+  win_timezone:
+    timezone: "{{ server_timezone }}" # From role defaults
+
+# Setting initial_size and maximum_size to 0 enables system managed pagefile
+# Reference: https://docs.ansible.com/ansible/2.9/modules/win_pagefile_module.html#win-pagefile-module
+- name: Configure Page File
+  win_pagefile:
+    automatic: no
+    drive: C
+    initial_size: 0
+    maximum_size: 0
+    override: yes
+    remove_all: yes
+    state: present
+    system_managed: yes
+    test_path: yes
+
+- name: Reboot VM if Required
+  win_reboot:
+    pre_reboot_delay: 0
+  when: region_result.restart_required

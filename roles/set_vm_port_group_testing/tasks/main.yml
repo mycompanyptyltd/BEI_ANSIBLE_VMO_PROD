@@ -1,0 +1,17 @@
+---
+
+# Using the vmware_guest module as the vmware_guest_network doesn't work in Ansible 2.9.18
+- name: Set VM NIC Port Group
+  vmware_guest:
+    cluster: "{{ vcenter_cluster }}" # From workflow survey
+    datacenter: "{{ vcenter_datacenter }}" # From workflow survey
+    hostname: "{{ vcenter_server }}" # From workflow survey
+    name: "{{ server_hostname | upper }}" # From workflow survey
+    networks:
+      - device_type: vmxnet3
+        name: "{{ vm_static_portgroup | replace('/','%2f') }}" # From workflow survey
+        start_connected: true
+    password: "{{ vcenter_password }}" # From workflow survey
+    state: present
+    username: "{{ vcenter_username }}" # From workflow survey
+    validate_certs: "{{ vmware_validate_certs }}" # From role defaults

@@ -1,0 +1,10 @@
+---
+
+- name: Configure NTP (DMZ On-Premises)
+  win_command: "w32tm.exe /config /manualpeerlist:\"{{ ntp_dmz_onprem }}\" /update /syncfromflags:MANUAL"
+  when: vcenter_server != "vcenter.sddc-13-211-4-132.vmwarevmc.com" # From workflow survey
+
+- name: Configure NTP (DMZ VMC)
+  win_command: "w32tm.exe /config /manualpeerlist:\"{{ ntp_dmz_vmc }}\" /update /syncfromflags:MANUAL"
+  when: vcenter_server == "vcenter.sddc-13-211-4-132.vmwarevmc.com" or # From workflow survey
+        vcenter_server == "vcenter.sddc-13-237-161-158.vmwarevmc.com"
