@@ -1,0 +1,57 @@
+---
+
+- name: Check if SEP Client Exists
+  win_service:
+    name: SepMasterService
+  register: sep_service
+
+- name: Copy & Install SEP Client
+  block:
+    - name: Include Variables for Domain
+      include_vars:
+        file: "{{ win_domain_fqdn | lower }}.yml"
+
+    - name: Create Temporary Folder
+      win_tempfile:
+        state: directory
+      register: temp_folder_return
+
+    - name: Copy SEP Client Installation Files
+      win_copy:
+        remote_src: yes
+        src: "{{ win_copy_src }}"
+        dest: "{{ temp_folder_return.path }}\\"
+      vars:
+        ansible_become: yes
+        ansible_become_method: runas
+        ansible_become_user: "{{ win_domain_admin_user_full }}" # From set_soe_facts role
+        ansible_become_pass: "{{ win_domain_admin_password }}"
+        ansible_become_flags: logon_type=new_credentials logon_flags=netcredentials_only
+    
+    - name: Install SEP Client
+      win_shell: |
+        .\Deploy-Application.ps1 -DeploymentType 'Install' -DeployMode 'Silent' -AllowRebootPassThru
+        Exit $LASTEXITCODE
+      args:
+        chdir: "{{ temp_folder_return.path }}"
+        no_profile: yes
+      register: install_return
+
+    - name: Assert Successful Installation
+      assert:
+        that:
+          # Return Code 0: Success
+          # Return Code 3010: Reboot Required
+          - install_return.rc == 0 or install_return.rc == 3010
+        fail_msg: "SEP Client installation failed (Return Code: {{ install_return.rc }})!"
+
+    - name: Delete Temporary Folder
+      win_file:
+        path: "{{ temp_folder_return.path }}"
+        state: absent
+
+    - name: Reboot Server if Required
+      win_reboot:
+        pre_reboot_delay: 0
+      when: install_return.rc == 3010
+  when: not sep_service.exists

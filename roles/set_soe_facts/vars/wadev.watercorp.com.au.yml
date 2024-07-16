@@ -1,0 +1,4 @@
+---
+
+file_source: \\vmwidev735.wadev.watercorp.com.au\ANSIBLEBUILD
+win_domain_admin_user_suffix: "{{ win_domain_fqdn | lower }}"

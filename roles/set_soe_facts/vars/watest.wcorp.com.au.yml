@@ -1,0 +1,4 @@
+---
+
+file_source: \\vmwitst735.watest.wcorp.com.au\ANSIBLEBUILD
+win_domain_admin_user_suffix: "{{ win_domain_fqdn | lower }}"

@@ -1,0 +1,52 @@
+---
+
+- name: Configure Temporary Local Admninistrator Removal Scheduled Task
+  block:
+    # Datetime object manipulation just using Ansible with Jinja2 filters is...rudimentary.
+    # Executing a PowerShell command on the host to get the required values is not ideal but it works.
+    - name: Get Start Boundary
+      win_shell: "[System.DateTime]::Now.AddHours({{ start_boundary_offset }}).ToString('s')" # From role defaults
+      args:
+        no_profile: yes
+      register: start_boundary_result
+      changed_when: start_boundary_result.rc != 0
+
+    - name: Get End Boundary
+      win_shell: "[System.DateTime]::Now.AddHours({{ start_boundary_offset }} + 1).ToString('s')" # From role defaults
+      args:
+        no_profile: yes
+      register: end_boundary_result
+      changed_when: end_boundary_result.rc != 0
+
+    - name: Create Temporary Local Admninistrator Removal Scheduled Task
+      win_scheduled_task:
+        actions:
+          - path: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+            arguments: -NoProfile -NonInteractive -Command "& { Remove-LocalUser -Name '{{ temp_admin_name }}' }"
+        allow_demand_start: yes
+        allow_hard_terminate: yes
+        author: Ansible
+        compatibility: 2 # Task is compatible with Task Scheduler 2.0
+        delete_expired_task_after: PT5S # ISO 8601 Duration, delete after 5 seconds
+        description: Remove Temporary Local Admninistrator Created By Ansible
+        enabled: yes
+        execution_time_limit: PT1M # ISO 8601 Duration, one minute
+        hidden: no
+        logon_type: service_account
+        multiple_instances: 2 # Will not start a new instance if another is running
+        name: Remove Temporary Local Admninistrator
+        priority: 7 # Default priority (https://docs.microsoft.com/en-au/windows/win32/taskschd/tasksettings-priority)
+        run_level: highest
+        run_only_if_idle: no
+        run_only_if_network_available: no
+        state: present
+        stop_if_going_on_batteries: no
+        triggers:
+          - type: time
+            enabled: yes
+            end_boundary: "{{ end_boundary_result.stdout }}"
+            start_boundary: "{{ start_boundary_result.stdout }}"
+        username: SYSTEM
+        version: "1.0"
+        wake_to_run: no
+  when: create_removal_task # From role defaults

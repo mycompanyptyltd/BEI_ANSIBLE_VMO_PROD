@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width" initial-scale="1">
+{% if build_result == 'fail' %}
+        <title>Server Build & Commission Failed: {{ server_hostname }}!</title>
+{% elif build_result == 'success' %}
+        <title>{{ build_engineer }} Has Built & Commissioned Server {{ server_hostname }}</title>
+{% endif %}
+    </head>
+    <body>
+{% if build_result == 'fail' %}
+        <h1>Server Build Failed!</h1>
+{% elif build_result == 'success' %}
+        <h1>New Server Build</h1>
+{% endif %}
+        <p>
+{% if build_result == 'fail' %}
+            Build and commission of server <strong>{{ server_hostname }}</strong> via Ansible AWX has failed! Refer to Ansible AWX for further information: <a target="_blank" href="{{ awx_url }}">{{ awx_url }}</a>. Make sure to clean-up any leftover resources.
+{% elif build_result == 'success' %}
+            {{ build_engineer }} has built and commissioned new server <strong>{{ server_hostname }}</strong> via Ansible AWX.</p><p>Please validate new ServiceNow CMDB CI: <a target="_blank" href="{{ snowcmdb_url }}{{ cmdbci_sysid }}">{{ server_hostname }}</a>
+{% endif %}
+        </p>
+        <hr>
+        <ul>
+            <li><strong>Hostname:</strong> {{ server_hostname }}</li>
+            <li><strong>Description:</strong> {{ server_description }}</li>
+            <li><strong>Ticket:</strong> {{ snow_ticket }}</li>
+            <li><strong>IP:</strong> {{ static_ip | default('N/A') }}</li>
+            <li><strong>Tier:</strong> {{ server_tier }}</li>
+            <li><strong>Domain:</strong> {{ win_domain_fqdn }}</li>
+            <li><strong>OS:</strong> {{ os_name | default('N/A') }}</li>
+            <li><strong>Memory:</strong> {{ vm_memory | default('N/A') }}</li>
+            <li><strong>CPU:</strong> {{ vm_cpus | default('N/A') }}</li>
+            <li><strong>Custodian:</strong> {{ custodian }}</li>
+            <li><strong>Tech Custodian:</strong> {{ tech_custodian }}</li>
+            <li><strong>Patching Group:</strong> {{ patching_group }}</li>
+            <li><strong>Build Date:</strong> {{ vm_build_date | default('N/A')}}</li>
+            <li><strong>Build Engineer:</strong> {{ build_engineer }}</li>
+            <li><strong>Commissioned:</strong> {{ commissioned }}</li>
+            <li><strong>Chargeable:</strong> {{ chargeable }}</li>
+        </ul>
+        <ul>
+            <li><strong>AWS Account ID:</strong> {{ ec2_account_id | default('N/A') }}</li>
+            <li><strong>Availability Zone:</strong> {{ ec2_availability_zone | default('N/A') }}</li>
+            <li><strong>Instance ID:</strong> {{ ec2_instance_id | default('N/A') }}</li>
+            <li><strong>Instance Type:</strong> {{ ec2_instance_type | default('N/A') }}</li>
+        </ul>
+    </body>
+</html>

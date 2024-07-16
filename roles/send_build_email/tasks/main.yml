@@ -1,0 +1,16 @@
+---
+
+- name: Include Variables
+  include_vars:
+    file: "{{ build_result | default('success') }}.yml"
+
+- name: Send Server Build E-mail
+  mail:
+    host: "{{ mail_host }}" # From role defaults
+    port: "{{ mail_port }}" # From role defaults
+    to: "{{ mail_to }}" # From role defaults
+    from: "{{ mail_from }}" # From role defaults
+    subject: "{{ subject }}" # From role vars
+    body: "{{ lookup('template', 'body.htm.j2') }}" # From role templates
+    subtype: html
+  delegate_to: localhost

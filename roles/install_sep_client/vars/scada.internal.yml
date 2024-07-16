@@ -1,0 +1,3 @@
+---
+
+win_copy_src: "{{ file_source_root }}\\agents\\av\\14.3.4615.2000\\SCADA Server\\Published\\"

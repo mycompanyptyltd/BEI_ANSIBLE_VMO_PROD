@@ -1,0 +1,4 @@
+---
+
+file_source: \\vscmsipdsp01.scada.internal\ANSIBLEBUILD
+win_domain_admin_user_suffix: "{{ win_domain_fqdn | lower }}"

@@ -1,0 +1,57 @@
+---
+
+# Reference: https://docs.microsoft.com/en-au/dotnet/framework/deployment/deployment-guide-for-developers#detect-net-framework
+- name: Check .NET Framework Release
+  win_reg_stat:
+    name: Release
+    path: HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full
+  register: reg_stat_result
+
+- name: Copy & Install .NET Framework 4.8
+  block:
+    - name: Create Temporary Folder
+      win_tempfile:
+        state: directory
+      register: temp_folder_return
+
+    - name: Copy .NET Framework 4.8 Installation File
+      win_copy:
+        remote_src: yes
+        src: "{{ file_source_root }}\\agents\\net48\\"
+        dest: "{{ temp_folder_return.path }}\\"
+      vars:
+        ansible_become: yes
+        ansible_become_method: runas
+        ansible_become_user: "{{ win_domain_admin_user_full }}" # From set_soe_facts role
+        ansible_become_pass: "{{ win_domain_admin_password }}"
+        ansible_become_flags: logon_type=new_credentials logon_flags=netcredentials_only
+
+    - name: Install .NET Framework 4.8
+      win_shell: |
+        .\ndp48-x86-x64-allos-enu.exe /q /norestart
+        Exit $LASTEXITCODE
+      args:
+        chdir: "{{ temp_folder_return.path }}"
+        no_profile: yes
+      register: install_return
+
+    - name: Assert Successful Installation
+      assert:
+        that:
+          # Return Code 0: Success
+          # Return Code 1641: Reboot Required
+          # Return Code 3010: Reboot Required
+          # Reference: https://docs.microsoft.com/en-au/dotnet/framework/deployment/deployment-guide-for-developers#return-codes
+          - install_return.rc == 0 or install_return.rc == 1641 or install_return.rc == 3010
+        fail_msg: ".NET Framework 4.8 installation failed (Return Code: {{ install_return.rc }})!"
+
+    - name: Delete Temporary Folder
+      win_file:
+        path: "{{ temp_folder_return.path }}"
+        state: absent
+
+    - name: Reboot Server if Required
+      win_reboot:
+        pre_reboot_delay: 0
+      when: install_return.rc == 1641 or install_return.rc == 3010
+  when: (not reg_stat_result.exists) or (reg_stat_result.value <= 461808)

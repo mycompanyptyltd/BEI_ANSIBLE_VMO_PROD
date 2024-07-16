@@ -1,0 +1,94 @@
+---
+
+- name: Include Variables for Domain
+  include_vars:
+    file: "{{ win_domain_fqdn | lower }}.yml" # From workflow survey
+
+# Possible Values:
+# "Server" (Desktop Experience)
+# "Server Core"
+- name: Get Server Installation Type
+  win_reg_stat:
+    path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion
+    name: InstallationType
+  register: installation_type
+
+# - name: Get Server Installation Type
+#   win_shell: Get-ItemPropertyValue 'HKLM:SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name InstallationType | ConvertTo-Json
+#   register: installation_type_raw
+
+# - name: Process Server Installation Type
+#   set_fact:
+#     Value: "{{ installation_type_raw.stdout | from_json }}"
+#   register: installation_type
+
+- name: Get Machine Info
+  win_shell: Get-CimInstance -Query 'SELECT * FROM Win32_ComputerSystem' | ConvertTo-Json -Depth 99
+  register: machine_hardware_info_raw
+
+- name: Process Machine Info
+  set_fact:
+    machine_hardware_info: "{{ machine_hardware_info_raw.stdout | from_json }}"
+
+- name: Get Facts from EC2 Metadata
+  block:
+    # Reference: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html#instance-metadata-v2-how-it-works
+    - name: Get IMDSv2 Token
+      win_uri:
+        headers:
+          X-aws-ec2-metadata-token-ttl-seconds: 21600
+        method: PUT
+        return_content: yes
+        url: http://169.254.169.254/latest/api/token
+      register: imdsv2_token
+
+    - name: Get Instance Identity Document
+      win_uri:
+        headers:
+          X-aws-ec2-metadata-token: "{{ imdsv2_token.content }}"
+        method: GET
+        return_content: yes
+        url: http://169.254.169.254/latest/dynamic/instance-identity/document
+      register: instance_identity_document
+
+    - name: Parse Instance Identity Document
+      set_fact:
+        instance_identity_document_parsed: "{{ instance_identity_document.content | from_json }}"
+
+    - name: Set EC2 Instance Facts
+      set_fact:
+        ec2_region: "{{ instance_identity_document_parsed.region }}"
+
+    - name: Set EC2 Instance Stats
+      set_stats:
+        aggregate: yes
+        data:
+          ec2_account_id: "{{ instance_identity_document_parsed.accountId }}"
+          ec2_availability_zone: "{{ instance_identity_document_parsed.availabilityZone }}"
+          ec2_instance_id: "{{ instance_identity_document_parsed.instanceId }}"
+          ec2_instance_type: "{{ instance_identity_document_parsed.instanceType }}"
+        per_host: no
+  when: ansible_system_vendor == "Amazon EC2"
+
+- name: Get Server Serial Number
+  win_shell: | 
+    ((Get-CimInstance Win32_bios) | Select-Object -ExpandProperty SerialNumber).Trim()
+  register: instance_serial
+
+- name: Set Host Facts
+  set_fact:
+    file_source_root: "{{ file_source }}" # From role vars
+    vm_build_date: "{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}" # From gathered facts
+    win_domain_admin_user_full: "{{ win_domain_admin_user }}@{{ win_domain_admin_user_suffix }}" # From workflow survey and role vars respectively
+
+- name: Set Machine Info Stats
+  set_stats:
+    aggregate: yes
+    data:
+      os_name: "{{ ansible_os_name }}"
+      installation_type: "{{ installation_type }}"
+      machine_manufacturer: "{{ machine_hardware_info.Manufacturer }}"
+      machine_model: "{{ machine_hardware_info.Model }}"
+      vm_build_date: "{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}"
+      server_serial: "{{ instance_serial.stdout_lines[0] }}"
+    per_host: no

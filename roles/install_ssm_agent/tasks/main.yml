@@ -1,0 +1,35 @@
+---
+
+- name: Create Temporary Folder
+  win_tempfile:
+    state: directory
+  register: temp_folder_return
+
+- name: Download SSM Agent Installer
+  win_get_url:
+    dest: "{{ temp_folder_return.path }}\\AmazonSSMAgentSetup.exe"
+    follow_redirects: safe
+    url: https://amazon-ssm-{{ ec2_region }}.s3.{{ ec2_region }}.amazonaws.com/latest/windows_amd64/AmazonSSMAgentSetup.exe # From set_soe_facts role
+    use_proxy: no
+    validate_certs: yes
+  register: download_ssm_agent_result
+
+- name: Intall SSM Agent
+  win_package:
+    path: "{{ download_ssm_agent_result.dest }}"
+    product_id: "{{ ssm_agent_product_id }}" # From role vars
+    state: present
+    arguments:
+      - /install
+      - /quiet
+      - /norestart
+
+- name: Delete Temporary Folder
+  win_file:
+    path: "{{ temp_folder_return.path }}"
+    state: absent
+
+- name: Restart SSM Agent Service
+  win_service:
+    name: AmazonSSMAgent
+    state: restarted

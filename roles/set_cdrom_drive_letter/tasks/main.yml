@@ -1,0 +1,22 @@
+---
+
+# DriveType of 5 == Compact Disk (Reference: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/aa394515(v=vs.85))
+# Script only attempts to set drive letter if a CD-ROM drive is found, drive letter derived from role defaults
+- name: Set CD-ROM Drive Letter
+  win_shell: |
+    $OpticalDrive = Get-CimInstance -ClassName 'Win32_Volume' | Where-Object -FilterScript { $_.DriveType -eq 5 }
+
+    if ($OpticalDrive -and $OpticalDrive.DriveLetter -ne '{{ cdrom_drive_letter }}') {
+      $OpticalDrive.DriveLetter = '{{ cdrom_drive_letter }}'
+      Set-CimInstance -InputObject $OpticalDrive
+      Exit 0
+    }
+
+    Exit 2
+  args:
+    no_profile: yes
+  register: set_drive_letter_result
+  changed_when: set_drive_letter_result.rc != 2
+  failed_when:
+    - set_drive_letter_result.rc != 0
+    - set_drive_letter_result.rc != 2

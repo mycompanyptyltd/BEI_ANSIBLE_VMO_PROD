@@ -1,0 +1,13 @@
+---
+
+- name: Set DNS client IP(s)
+  win_dns_client:
+    adapter_names: "{{ net_adapter }}"
+    ipv4_addresses: "{{ dns_server_ip.split(',') }}"
+
+- name: Set IP Address and Default Gateway
+  win_shell: Get-NetIPAddress -InterfaceAlias {{ net_adapter }} -AddressFamily IPv4 | New-NetIpAddress -IpAddress {{ static_ip | ipaddr('host/prefix') | ipaddr('address') }} -PrefixLength {{ static_ip | ipaddr('host/prefix') | ipaddr('prefix') }} -DefaultGateway {{ default_gateway }}
+  args:
+    no_profile: yes
+  async: 1000 # Use asynchronous execution as host will lose network connectivity until port group is updated
+  poll: 0

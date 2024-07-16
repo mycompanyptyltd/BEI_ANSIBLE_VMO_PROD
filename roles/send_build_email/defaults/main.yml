@@ -1,0 +1,9 @@
+---
+
+awx_url: https://vawxprdapp01.corpnet.watercorporation.com.au/
+snowcmdb_url: https://watercorporation.service-now.com/nav_to.do?uri=%2Fcmdb_ci_win_server.do%3Fsys_id%3D
+
+mail_from: Ansible <ansible@watercorporation.com.au>
+mail_host: smtp.corpnet.watercorporation.com.au
+mail_port: 25
+mail_to: BEI_Wintel_NewServer_DL <BEI_Wintel_NewServer_DL@watercorporation.com.au>

@@ -1,0 +1,4 @@
+---
+
+create_removal_task: yes
+start_boundary_offset: 6 # Removal task offset in hours
