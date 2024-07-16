@@ -1,8 +1,8 @@
-# Windows Server 2019 SOE Ansible Playbooks
+# Windows Server 2022 SOE Ansible Playbooks
 
 ## Overview
 
-This repository contains a collection of Ansible playbooks, roles and accompanying resources that are required to provision and configure servers as per the [**Windows Server 2019 SOE Specification**](https://nexus.watercorporation.com.au/otcs/cs.exe/app/nodes/124134108). The included Ansible playbooks and roles are intended to be executed via specially configured workflow jobs in Ansible AWX.
+This repository contains a collection of Ansible playbooks, roles and accompanying resources that are required to provision and configure servers as per the [**Windows Server 2022 SOE Specification**](https://nexus.watercorporation.com.au/otcs/cs.exe/app/nodes/124134108). The included Ansible playbooks and roles are intended to be executed via specially configured workflow jobs in Ansible AWX.
 
 ## Contents
 
