@@ -1,0 +1,8 @@
+---
+
+- name: Send Build E-mail
+  connection: local
+  gather_facts: no
+  hosts: localhost
+  roles:
+    - role: send_build_email

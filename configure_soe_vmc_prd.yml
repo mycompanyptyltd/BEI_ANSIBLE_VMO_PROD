@@ -1,0 +1,45 @@
+---
+
+- name: Configure SOE
+  gather_facts: yes
+  hosts: "{{ inventory_host_name }}"
+  roles:
+    - role: set_soe_facts
+    - role: add_commission_script
+      when: 
+        - commissioned == "No"
+        - installation_type.value != "Server Core"
+    - role: install_bginfo
+      when:
+        - installation_type.value != "Server Core"
+        - ansible_system_vendor != "Amazon EC2"
+    - role: install_laps
+      when: win_domain_fqdn != "DMZ"
+    # - role: install_sep_client
+    - role: install_crowdstrike
+    - role: install_splunk_agent
+    - role: install_nessus_agent
+      when: win_domain_fqdn != "scada.internal"
+    - role: install_ssm_agent
+      when: ansible_system_vendor == "Amazon EC2"
+    - role: install_cw_agent
+      when: ansible_system_vendor == "Amazon EC2"
+    - role: install_mecm_client
+    - role: install_net_48
+    - role: disable_ie11
+      when: installation_type.value != "Server Core"
+    - role: configure_snmp_service
+    - role: set_cdrom_drive_letter
+    - role: windows_settings_common
+    - role: windows_settings_core
+      when: installation_type.value == "Server Core"
+    - role: windows_settings_gui
+      when: installation_type.value != "Server Core"
+    - role: harden_2019_common
+    - role: harden_2019_core
+      when: installation_type.value == "Server Core"
+    - role: harden_2019_gui
+      when: installation_type.value != "Server Core"
+    - role: set_soe_reg_info
+    - role: remove_temp_local_admin
+      when: vcenter_datacenter is defined

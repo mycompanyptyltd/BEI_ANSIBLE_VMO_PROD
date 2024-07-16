@@ -1,0 +1,8 @@
+---
+
+- name: Add to ServiceNow CMDB
+  connection: local
+  gather_facts: yes
+  hosts: localhost
+  roles:
+    - role: add_to_CMDB

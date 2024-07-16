@@ -1,0 +1,8 @@
+---
+
+- name: Bootstrap Host for Management by Ansible
+  gather_facts: no
+  hosts: "{{ inventory_host_name }}"
+  roles:
+    - role: configure_winrm
+    - role: configure_temp_local_admin

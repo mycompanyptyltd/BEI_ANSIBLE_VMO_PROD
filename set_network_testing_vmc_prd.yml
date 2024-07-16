@@ -1,0 +1,15 @@
+---
+
+#- name: Set Guest OS IP Address
+#  gather_facts: no
+#  hosts: "{{ inventory_host_name }}"
+#  roles:
+#    - role: set_ip_address
+#
+- name: Set VMware Port Group
+  connection: local
+  gather_facts: no
+  hosts: localhost
+  roles:
+    - role: set_vm_port_group_testing
+#      when: vcenter_server != "vcenter.sddc-13-211-4-132.vmwarevmc.com"
