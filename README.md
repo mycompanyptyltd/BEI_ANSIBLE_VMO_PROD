@@ -12,7 +12,7 @@ The structure of this repository is aligned with the Ansible best practice ([Ref
 - [`add_to_CMDB.yml`](/add_to_CMDB.yml) - Adds new server to ServiceNow CMDB upon a successful build.
 - [`bootstrap_host.yml`](/bootstrap_host.yml) - Configures a host for management by Ansible.
 - [`build_from_template.yml`](/build_from_template.yml) - Provisions a Windows Server 2019 VM from a template to a specified VMware environment.
-- [`configure_soe.yml`](/configure_soe.yml) - Configures a server as per section **2.3** of the [**Windows Server 2019 SOE Specification**](https://nexus.watercorporation.com.au/otcs/cs.exe/app/nodes/124134108).
+- [`configure_soe.yml`](/configure_soe.yml) - Configures a server as per section **2.3** of the [**Windows Server 2022 SOE Specification**](https://nexus.watercorporation.com.au/otcs/cs.exe/app/nodes/124134108).
 - [`configure_temp_local_admin.yml`](/configure_temp_local_admin.yml) - Creates a temporary local administrator account on the target server for use by Ansible.
 - [`domain_join.yml`](/domain_join.yml) - Joins target server to the specified AD domain.
 - [`fail_build.yml`](/fail_build.yml) - Fails server build for consistent output in AWX.
