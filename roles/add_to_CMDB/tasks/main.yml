@@ -1,0 +1,117 @@
+---
+
+- name: Check if Server exists in CMDB
+  uri:
+    method: GET
+    headers:
+      Authorization: Basic "{{ base64_auth_info }}"
+      Accept: application/json
+      Content-Type: application/json
+    force_basic_auth: yes
+    return_content: yes
+    body_format: json
+    url: "{{ ( CMDB_check_url + server_serial ) | replace(' ','%20') }}"
+  register: result
+
+- name: Get sysid from existing CMDB CI
+  set_fact:
+      cmdb_sysid : "{{ result.json.result[0].sys_id }}"
+  when: result.json.result[0] is defined
+
+- name: Set VM Server Type
+  set_fact:
+    server_type : virtual
+    server_location : "{{ 'VMware (Cloud)' if vcenter_server == 'vcenter.sddc-13-237-161-158.vmwarevmc.com' else 'John Tonkin Water Centre' }}"
+  when: vcenter_datacenter is defined
+
+- name: Set AWS Server Type
+  set_fact:
+    server_type : virtual
+    server_location : AWS (Cloud)
+  when: ansible_system_vendor == "Amazon EC2"
+
+- name: Set Physical Server Type
+  set_fact:
+    server_type : physical
+    server_location : John Tonkin Water Centre
+  when: vcenter_datacenter is undefined and ansible_system_vendor != "Amazon EC2"
+
+- name: Parse Commissioned Status
+  set_fact:
+    install_state : "{{ '1' if commissioned == 'Yes' else '9' }}"
+
+- name: Update Existing CMDB CI
+  uri:
+    method: PUT
+    headers:
+      Authorization: Basic "{{ base64_auth_info }}"
+      Accept: application/json
+      Content-Type: application/json
+    force_basic_auth: yes
+    body_format: json
+    return_content: yes
+    url: "{{ CMDB_update_url }}{{ cmdb_sysid }}"
+    body: 
+      serial_number : "{{ server_serial }}"
+      host_name : "{{ server_hostname }}"
+      name : "{{ server_hostname }}"
+      u_server_type : "{{ server_type }}"
+      short_description : "{{ server_description }}"
+      comments : "{{ server_description }}"
+      u_environment : "{{ server_environment }}"
+      u_domain_workgroup : "{{ win_domain_fqdn }}"
+      u_tier : "{{ 'tier_' + server_tier|string }}"
+      u_application_technical_custodian : "{{ tech_custodian }}"
+      u_application_business_custodian : "{{ custodian }}"
+      support_group : "{{ tech_custodian }}"
+      u_patching_group : "{{ patching_group }}"
+      u_specifc_location : "{{ server_location }}"
+      u_chargeable : "{{ chargeable }}"
+      u_build_reference : "{{ snow_ticket }}"
+      install_status : "{{ install_state }}"
+  when: cmdb_sysid is defined
+
+- name: Create New CMDB CI
+  uri:
+    method: POST
+    headers:
+      Authorization: Basic "{{ base64_auth_info }}"
+      Accept: application/json
+      Content-Type: application/json
+    force_basic_auth: yes
+    body_format: json
+    status_code: 200, 201
+    return_content: yes
+    url: "{{ CMDB_add_url }}"
+    body: 
+      serial_number : "{{ server_serial }}"
+      host_name : "{{ server_hostname }}"
+      name : "{{ server_hostname }}"
+      u_server_type : "{{ server_type }}"
+      short_description : "{{ server_description }}"
+      comments : "{{ server_description }}"
+      u_environment : "{{ server_environment }}"
+      u_domain_workgroup : "{{ win_domain_fqdn }}"
+      u_tier : "{{ 'tier_' + server_tier|string }}"
+      u_application_technical_custodian : "{{ tech_custodian }}"
+      u_application_business_custodian : "{{ custodian }}"
+      support_group : "{{ tech_custodian }}"
+      u_patching_group : "{{ patching_group }}"
+      u_specifc_location : "{{ server_location }}"
+      u_chargeable : "{{ chargeable }}"
+      u_build_reference : "{{ snow_ticket }}"
+      install_status : "{{ install_state }}"
+  when: cmdb_sysid is undefined   
+  register: newresult
+
+- name: Set sysid from new CMDB CI
+  set_fact:
+      cmdb_sysid : "{{ newresult.json.result.sys_id }}"
+  when: cmdb_sysid is undefined
+  
+- name: Set SysID Stat
+  set_stats:
+    aggregate: yes
+    data:
+      cmdbci_sysid : "{{ cmdb_sysid }}"
+    per_host: no

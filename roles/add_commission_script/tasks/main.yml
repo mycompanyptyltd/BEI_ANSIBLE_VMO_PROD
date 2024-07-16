@@ -1,0 +1,23 @@
+---
+
+- name: Set Files to copy
+  set_fact:
+    script_file: "Set-Commissioned.ps1"
+    bat_file: "Set-Commissioned.bat"
+
+- name: Copy Powershell File
+  win_copy:
+    src: "{{ script_file }}"
+    dest: 'C:\Temp\'
+
+- name: Copy Batch File #Required to elevate the powershell script for ease of use
+  win_copy:
+    src: "{{ bat_file }}"
+    dest: 'C:\Temp\'
+
+- name: Create a Shortcut to Script on Desktop
+  win_shortcut:
+    description: Set_Commissioned
+    dest: 'C:\Users\Public\Desktop\Set-Commissioned.lnk'
+    src: 'C:\Temp\Set-Commissioned.bat'
+    state: present

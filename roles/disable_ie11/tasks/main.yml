@@ -1,0 +1,13 @@
+---
+
+- name: Disable Internet Explorer 11
+  win_optional_feature:
+    include_parent: no
+    name: Internet-Explorer-Optional-amd64
+    state: absent
+  register: ie11_disable_result
+
+- name: Reboot if Required
+  win_reboot:
+    pre_reboot_delay: 0
+  when: ie11_disable_result.reboot_required

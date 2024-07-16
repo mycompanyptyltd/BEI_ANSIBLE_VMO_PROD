@@ -1,0 +1,22 @@
+---
+
+- name: Common Configuration
+  include_tasks:
+    file: common.yml
+
+- name: Corporate-Only Configuration
+  include_tasks:
+    file: corporate.yml
+  when:
+    - win_domain_fqdn != "DMZ" # From workflow survey
+    - win_domain_fqdn != "scada.internal" # From workflow survey
+
+- name: DMZ-Only Configuration
+  include_tasks:
+    file: dmz.yml
+  when: win_domain_fqdn == "DMZ" # From workflow survey
+
+- name: SCADA-Only Configuration
+  include_tasks:
+    file: scada.yml
+  when: win_domain_fqdn == "scada.internal" # From workflow survey

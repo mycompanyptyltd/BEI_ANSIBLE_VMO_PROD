@@ -1,0 +1,3 @@
+---
+
+configure_winrm_script_name: ConfigureRemotingForAnsible.ps1

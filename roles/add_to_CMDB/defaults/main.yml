@@ -1,0 +1,4 @@
+---
+CMDB_check_url: https://watercorporation.service-now.com/api/now/table/cmdb_ci_win_server?serial_number=
+CMDB_update_url: https://watercorporation.service-now.com/api/now/table/cmdb_ci_win_server/
+CMDB_add_url: https://watercorporation.service-now.com/api/now/table/cmdb_ci_win_server

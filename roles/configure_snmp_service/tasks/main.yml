@@ -1,0 +1,113 @@
+---
+
+- name: Assert SNMP Read/Write Values Defined
+  assert:
+    fail_msg: "'snmp_read' and 'snmp_write' variables are required to configure SNMP Service!"
+    that:
+      - snmp_read is defined
+      - snmp_write is defined
+
+- name: Install SNMP Service
+  win_feature:
+    include_management_tools: yes
+    include_sub_features: no
+    name: SNMP-Service
+    state: present
+  register: install_snmp_service_result
+
+- name: Install SNMP Tools
+  win_feature:
+    include_management_tools: no
+    include_sub_features: no
+    name: RSAT-SNMP
+    state: present
+  when: installation_type.value != "Server Core"
+
+- name: SNMP Trap Configuration
+  win_regedit:
+    data: "{{ item.data }}"
+    name: "{{ item.name }}"
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters\TrapConfiguration\{{ snmp_read }}
+    state: present
+    type: string
+  loop:
+    - name: 1
+      data: 10.3.162.5
+    - name: 2
+      data: 10.3.162.6
+
+- name: SNMP Community Configuration
+  win_regedit:
+    data: "{{ item.data }}"
+    name: "{{ item.name }}"
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters\ValidCommunities
+    state: present
+    type: dword
+  loop:
+    - name: "{{ snmp_read }}"
+      data: 4
+    - name: "{{ snmp_write }}"
+      data: 8
+
+- name: SNMP Permitted Manager Configuration
+  win_regedit:
+    data: "{{ item.data }}"
+    name: "{{ item.name }}"
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters\PermittedManagers
+    state: present
+    type: string
+  loop:
+    - name: 1
+      data: 10.3.162.5
+    - name: 2
+      data: 10.3.162.6
+    - name: 3
+      data: 10.3.162.9
+    - name: 4
+      data: 10.3.161.9
+    - name: 5
+      data: 10.3.161.11
+    - name: 6
+      data: localhost
+    - name: 7
+      data: 10.3.161.10
+
+- name: Disable Authentication Traps
+  win_regedit:
+    data: 0
+    name: EnableAuthenticationTraps
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters
+    state: present
+    type: dword
+
+- name: Enable All SNMP Services
+  win_regedit:
+    data: 79
+    name: sysServices
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters\RFC1156Agent
+    state: present
+    type: dword
+
+- name: Set SNMP Agent Details
+  win_regedit:
+    data: "{{ item.data }}"
+    name: "{{ item.name }}"
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters\RFC1156Agent
+    state: present
+    type: string
+  loop:
+    - name: sysContact
+      data: "{{ custodian }}"
+    - name: sysLocation
+      data: "[T{{ server_tier }}]"
+
+- name: Enable SNMP Service
+  win_service:
+    name: SNMP
+    start_mode: delayed
+    state: started
+
+- name: Post-Configure Reboot
+  win_reboot:
+    pre_reboot_delay: 0
+  when: install_snmp_service_result.reboot_required

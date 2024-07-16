@@ -1,0 +1,7 @@
+---
+
+server_2019_desktop_experience_template: WinServer2019DesktopExperience-PackerBuild
+server_2019_core_template: WinServer2019Core-PackerBuild
+
+vmware_templates_folder: Templates
+vmware_validate_certs: no

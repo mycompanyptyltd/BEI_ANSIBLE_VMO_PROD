@@ -1,0 +1,2 @@
+---
+win_copy_src: "{{ file_source_root }}\\agents\\crowdstrike\\Falcon\\7.01.17311.0\\Published\\"

@@ -1,0 +1,11 @@
+---
+
+- name: Set Local Administrator Account Password
+  win_user:
+    name: "{{ local_administrator_name }}" # From role defaults
+    password: "{{ dmz_local_admin_pass }}" # Injected via "DMZ Local Administrator" credential type
+    password_expired: no
+    password_never_expires: yes
+    state: present
+    update_password: always
+    user_cannot_change_password: yes

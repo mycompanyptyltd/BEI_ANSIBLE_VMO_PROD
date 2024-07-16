@@ -1,0 +1,53 @@
+---
+
+- name: Check if Nessus Agent Service Exists
+  win_service:
+    name: Tenable Nessus Agent
+  register: nessus_service
+
+- name: Copy & Install Nessus Agent
+  block:
+    - name: Create Temporary Folder
+      win_tempfile:
+        state: directory
+      register: temp_folder_return
+
+    - name: Copy Nessus Agent Installation Files
+      win_copy:
+        remote_src: yes
+        src: "{{ file_source_root }}\\agents\\nessus\\8.3.0\\Published\\"
+        dest: "{{ temp_folder_return.path }}\\"
+      vars:
+        ansible_become: yes
+        ansible_become_method: runas
+        ansible_become_user: "{{ win_domain_admin_user_full }}" # From set_soe_facts role
+        ansible_become_pass: "{{ win_domain_admin_password }}"
+        ansible_become_flags: logon_type=new_credentials logon_flags=netcredentials_only
+
+    - name: Install Nessus Agent
+      win_shell: |
+        .\Deploy-Application.ps1 -DeploymentType 'Install' -DeployMode 'Silent' -AllowRebootPassThru
+        Exit $LASTEXITCODE
+      args:
+        chdir: "{{ temp_folder_return.path }}"
+        no_profile: yes
+      register: install_return
+
+    - name: Assert Successful Installation
+      assert:
+        that:
+          # Return Code 0: Success
+          # Return Code 3010: Reboot Required
+          - install_return.rc == 0 or install_return.rc == 3010
+        fail_msg: "Nessus Agent installation failed (Return Code: {{ install_return.rc }})!"
+
+    - name: Delete Temporary Folder
+      win_file:
+        path: "{{ temp_folder_return.path }}"
+        state: absent
+
+    - name: Reboot Server if Required
+      win_reboot:
+        pre_reboot_delay: 0
+      when: install_return.rc == 3010
+  when: not nessus_service.exists

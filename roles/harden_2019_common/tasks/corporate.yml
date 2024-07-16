@@ -1,0 +1,22 @@
+---
+
+### RDP Session Configuration ###
+
+- name: Set RDP Session Settings
+  win_regedit:
+    data: "{{ item.data }}"
+    name: "{{ item.name }}"
+    path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+    state: present
+    type: dword
+  loop: "{{ rdp_session_config }}" # From role defaults
+
+### Cached Logon Configuration ###
+
+- name: Set Cached Logon Count
+  win_regedit:
+    data: "{{ cached_logon_count }}" # From role defaults
+    name: CachedLogonsCount
+    path: HKLM:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon
+    state: present
+    type: string

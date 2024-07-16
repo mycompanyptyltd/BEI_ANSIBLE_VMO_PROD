@@ -1,0 +1,11 @@
+---
+
+bginfo_config:
+  commissioned:
+    development: DMZ.bgi
+    production: DMZ.bgi
+    test: DMZ.bgi
+  non_commissioned:
+    development: NonDMZ.bgi
+    production: NonDMZ.bgi
+    test: NonDMZ.bgi

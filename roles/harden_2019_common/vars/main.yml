@@ -1,0 +1,6 @@
+---
+
+### CA Certificate Installation ###
+
+issuing_ca_file_name: wcissuing.cer
+root_ca_file_name: wcroot.cer

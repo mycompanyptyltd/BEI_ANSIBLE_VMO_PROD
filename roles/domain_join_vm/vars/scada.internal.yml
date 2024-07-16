@@ -1,0 +1,6 @@
+---
+
+domain_ou_dn:
+  development: OU=TEST-Servers,DC=scada,DC=internal
+  production: OU=SCADA-Servers,DC=scada,DC=internal
+  test: OU=TEST-Servers,DC=scada,DC=internal

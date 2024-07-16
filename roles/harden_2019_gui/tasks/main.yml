@@ -1,0 +1,46 @@
+---
+
+### Disable Non-Admin Script Execution via AppLocker ###
+
+- name: Disable Non-Admin Script Execution via AppLocker
+  block:
+    # Reference: https://docs.microsoft.com/en-us/powershell/module/applocker/get-applockerpolicy?view=windowsserver2019-ps
+    - name: Check for Existing AppLocker Script Rule Collection
+      win_shell: (Get-AppLockerPolicy -Local).HasRuleCollection('Script')
+      args:
+        no_profile: yes
+      register: applocker_policy_result
+
+    # Only executes if no existing Script rule collection configured
+    - name: Set AppLocker Policy
+      block:
+        - name: Create Temporary Folder
+          win_tempfile:
+            state: directory
+          register: applocker_temp_folder
+
+        - name: Copy AppLocker Policy File
+          win_copy:
+            src: "{{ applocker_policy_file }}" # From role vars
+            dest: "{{ applocker_temp_folder.path }}\\"
+
+        # Reference: https://docs.microsoft.com/en-us/powershell/module/applocker/set-applockerpolicy?view=windowsserver2019-ps
+        - name: Set AppLocker Policy
+          win_shell: Set-AppLockerPolicy -XmlPolicy (Join-Path -Path '{{ applocker_temp_folder.path }}' -ChildPath '{{ applocker_policy_file }}')
+          args:
+            no_profile: yes
+
+        - name: Delete Temporary Folder
+          win_file:
+            path: "{{ applocker_temp_folder.path }}"
+            state: absent
+      when: applocker_policy_result.stdout == 'False'
+  when: win_domain_fqdn != "scada.internal" # From workflow survey
+
+### Disable Print Spooler ###
+
+- name: Disable Print Spooler Service
+  win_service:
+    name: Spooler
+    state: stopped
+    start_mode: disabled

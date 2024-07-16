@@ -1,0 +1,49 @@
+---
+
+- name: Create Temporary Folder
+  win_tempfile:
+    state: directory
+  register: temp_folder_return
+
+- name: Copy MECM Client Installation Files
+  win_copy:
+    remote_src: yes
+    src: "{{ file_source_root }}\\agents\\sccm\\"
+    dest: "{{ temp_folder_return.path }}\\"
+  vars:
+    ansible_become: yes
+    ansible_become_method: runas
+    ansible_become_user: "{{ win_domain_admin_user_full }}" # From set_soe_facts role
+    ansible_become_pass: "{{ win_domain_admin_password }}"
+    ansible_become_flags: logon_type=new_credentials logon_flags=netcredentials_only
+
+# Only installs if product ID is not detected on the system
+# Ansible Reference: https://docs.ansible.com/ansible/2.9/modules/win_package_module.html#parameter-product_id
+# Microsoft Reference: https://docs.microsoft.com/en-us/mem/configmgr/core/clients/deploy/about-client-installation-properties
+- name: Install MECM Client
+  win_package:
+    path: "{{ temp_folder_return.path }}\\ccmsetup.exe"
+    product_id: "{{ sccm_product_id }}" # From role vars
+    state: present
+    arguments:
+      - /forceinstall
+      - /mp:{{ sccm_management_point }} # From role vars
+      - /source:\\{{ sccm_management_point }}\SMS_{{ sccm_site_code }}\Client # From role vars
+      - DNSSUFFIX={{ sccm_dns_suffix }} # From role vars
+      - SMSSITECODE={{ sccm_site_code }} # From role vars
+    expected_return_code:
+      - 0 # Success
+      - 7 # Reboot Required
+  register: install_mecm_client_result
+
+- name: Delete Temporary Folder
+  win_file:
+    path: "{{ temp_folder_return.path }}"
+    state: absent
+
+# Reboot if return code is 7
+# Reference: https://docs.microsoft.com/en-us/mem/configmgr/core/clients/deploy/about-client-installation-properties#ccmsetupReturnCodes
+- name: Reboot if Required
+  win_reboot:
+    pre_reboot_delay: 0
+  when: install_mecm_client_result.rc == 7

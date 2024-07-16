@@ -1,0 +1,11 @@
+---
+
+bginfo_config:
+  commissioned:
+    development: Development.bgi
+    production: Production.bgi
+    test: Test.bgi
+  non_commissioned:
+    development: NonDevelopment.bgi
+    production: NonProduction.bgi
+    test: NonTest.bgi

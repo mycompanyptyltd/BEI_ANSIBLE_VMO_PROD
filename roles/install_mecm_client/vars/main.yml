@@ -1,0 +1,6 @@
+---
+
+sccm_dns_suffix: corpnet.watercorporation.com.au
+sccm_management_point: vmwijt1736.corpnet.watercorporation.com.au
+sccm_product_id: '{92F4C088-B002-4B3C-A503-D934EB0C35CC}'
+sccm_site_code: WCO

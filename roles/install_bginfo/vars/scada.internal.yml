@@ -1,0 +1,11 @@
+---
+
+bginfo_config:
+  commissioned:
+    development: SCADA Test.bgi
+    production: SCADA Production.bgi
+    test: SCADA Test.bgi
+  non_commissioned:
+    development: NonSCADA Test.bgi
+    production: NonSCADA Production.bgi
+    test: NonSCADA Test.bgi

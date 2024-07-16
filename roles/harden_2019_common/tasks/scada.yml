@@ -1,0 +1,17 @@
+---
+
+- name: Create Local SCADA Administrator Account
+  win_user:
+    account_disabled: no
+    description: Last resort account used by the SCADA Maintenance team to administer ClearSCADA/GeoSCADA servers during a network outage event.
+    fullname: SCADA Administrator
+    groups:
+      - Administrators
+    groups_action: replace
+    name: "{{ scada_admin_name }}" # Injected by SCADA Admin credential type
+    password: "{{ scada_admin_pass }}" # Injected by SCADA Admin credential type
+    password_expired: no
+    password_never_expires: yes
+    state: present
+    update_password: always
+    user_cannot_change_password: yes

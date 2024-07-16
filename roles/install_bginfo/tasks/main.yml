@@ -1,0 +1,50 @@
+---
+
+- name: Include Variables for Domain
+  include_vars:
+    file: "{{ win_domain_fqdn | lower }}.yml"
+
+- name: Set Commissioned Config File
+  set_fact:
+    bginfo_config_file: "{{ bginfo_config['commissioned'][server_environment | lower] }}"
+  when: commissioned == "Yes" # From workflow survey
+
+- name: Set Non-Commissioned Config File
+  set_fact:
+    bginfo_config_file: "{{ bginfo_config['non_commissioned'][server_environment | lower] }}"
+    final_bginfo_config_file: "{{ bginfo_config['commissioned'][server_environment | lower] }}"
+  when: commissioned == "No" # From workflow survey
+
+- name: Copy BGInfo Executable
+  win_copy:
+    remote_src: yes
+    src: "{{ file_source_root }}\\BGInfo\\"
+    dest: '%ProgramFiles%\BGInfo\'
+  vars:
+    ansible_become: yes
+    ansible_become_method: runas
+    ansible_become_user: "{{ win_domain_admin_user_full }}" # From set_soe_facts role
+    ansible_become_pass: "{{ win_domain_admin_password }}"
+    ansible_become_flags: logon_type=new_credentials logon_flags=netcredentials_only
+
+- name: Copy BGInfo Config File
+  win_copy:
+    src: "{{ bginfo_config_file }}"
+    dest: '%ProgramFiles%\BGInfo\'
+
+- name: Copy Commissionned BGInfo Config File
+  win_copy:
+    src: "{{ final_bginfo_config_file }}"
+    dest: '%ProgramFiles%\BGInfo\'
+  when: commissioned == "No" # From workflow survey
+
+# /TIMER:0 == updates display without launching configuration dialog
+# /NOLICPROMPT == suppresses EULA prompt
+# Reference: https://docs.microsoft.com/en-us/sysinternals/downloads/bginfo
+- name: Create a Shortcut to BGInfo in Startup Folder
+  win_shortcut:
+    arguments: "\"C:\\Program Files\\BGInfo\\{{ bginfo_config_file }}\" /TIMER:0 /NOLICPROMPT"
+    description: BGInfo
+    dest: '%ProgramData%\Microsoft\Windows\Start Menu\Programs\Startup\Start-BGinfo.lnk'
+    src: '%ProgramFiles%\BGInfo\Bginfo64.exe'
+    state: present

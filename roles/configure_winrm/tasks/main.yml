@@ -1,0 +1,24 @@
+---
+
+- name: Create Temporary Folder
+  win_tempfile:
+    state: directory
+  register: temp_folder_return
+
+- name: Copy WinRM Configuration Script
+  win_copy:
+    src: "{{ configure_winrm_script_name }}" # From role vars
+    dest: "{{ temp_folder_return.path }}\\"
+
+- name: Execute WinRM Configuration Script
+  win_shell: |
+    .\{{ configure_winrm_script_name }} -ForceNewSSLCert -SkipNetworkProfileCheck
+    Exit $LASTEXITCODE
+  args:
+    chdir: "{{ temp_folder_return.path }}"
+    no_profile: yes
+
+- name: Delete Temporary Folder
+  win_file:
+    path: "{{ temp_folder_return.path }}"
+    state: absent

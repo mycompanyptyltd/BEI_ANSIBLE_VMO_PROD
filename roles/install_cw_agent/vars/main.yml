@@ -1,0 +1,4 @@
+---
+
+config_file_name: amazon-cloudwatch-agent.json
+config_file_path: C:\ProgramData\Amazon\AmazonCloudWatchAgent\

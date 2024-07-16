@@ -1,0 +1,12 @@
+---
+
+# Only installs if product ID is not detected on the system
+- name: Install LAPS
+  win_package:
+    path: "{{ file_source_root }}\\agents\\laps\\LAPS.x64.msi" # From soe_set_facts role
+    product_id: "{{ laps_product_id }}" # From role vars
+    state: present
+    username: "{{ win_domain_admin_user_full }}" # From soe_set_facts role
+    password: "{{ win_domain_admin_password }}" # From workflow survey
+    arguments:
+      - /quiet

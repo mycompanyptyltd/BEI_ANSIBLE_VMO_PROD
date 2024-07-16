@@ -1,0 +1,44 @@
+---
+
+### Local Administrator Account Configuration ###
+
+local_administrator_name: NTSS
+
+### SCHANNEL Configuration ###
+
+insecure_schannel_protocols:
+  - SSL 1.0
+  - SSL 2.0
+  - SSL 3.0
+  - TLS 1.0
+  - TLS 1.1
+
+### Password Complexity Configuration ###
+
+minimum_password_age: 6
+maximum_password_age: 60
+minimum_password_length: 8
+password_complexity: 1
+password_history_size: 12
+clear_text_password: 0
+
+### Logon Banner Configuration ###
+
+logon_banner_caption: Security Disclaimer
+logon_banner_text: Access to this system is restricted to employees of, and persons specifically authorised by, Water Corporation and solely for use for lawful purposes and in accordance with Water Corporation's policies and related standards. All other use is strictly prohibited and may result in legal action or criminal penalties. Use of this system is subject to monitoring, recording of activity, auditing and testing at any time. Click OK to acknowledge acceptance of these conditions.
+
+### Event Log Size Configuration ###
+
+maximum_size_in_bytes: 209715200 # 200MB
+
+### RDP Session Configuration ###
+
+rdp_session_config:
+  - name: MaxDisconnectionTime
+    data: 21600000 # 6 hours
+  - name: MaxIdleTime
+    data: 7200000 # 2 hours
+
+### Cached Logon Configuration ###
+
+cached_logon_count: 5

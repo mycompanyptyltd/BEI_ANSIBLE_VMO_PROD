@@ -1,0 +1,52 @@
+---
+
+- name: Create Temporary Folder
+  win_tempfile:
+    state: directory
+  register: temp_folder_return
+
+- name: Download CloudWatch Agent Installer
+  win_get_url:
+    dest: "{{ temp_folder_return.path }}\\amazon-cloudwatch-agent.msi"
+    follow_redirects: safe
+    url: https://s3.{{ ec2_region }}.amazonaws.com/amazoncloudwatch-agent-{{ ec2_region }}/windows/amd64/latest/amazon-cloudwatch-agent.msi # From set_soe_facts role
+    use_proxy: no
+    validate_certs: yes
+  register: download_cw_agent_result
+
+- name: Install CloudWatch Agent
+  win_package:
+    path: "{{ download_cw_agent_result.dest }}"
+    state: present
+    arguments:
+      - /quiet
+      - /norestart
+
+- name: Delete Temporary Folder
+  win_file:
+    path: "{{ temp_folder_return.path }}"
+    state: absent
+
+- name: Copy CloudWatch Agent Configuration File
+  win_copy:
+    dest: "{{ config_file_path }}" # From role vars
+    src: "{{ config_file_name }}" # From role vars
+  register: config_file_copy_result
+
+# Configure only runs if config file is new/changed
+- name: Configure CloudWatch Agent
+  win_shell: "& \"C:\\Program Files\\Amazon\\AmazonCloudWatchAgent\\amazon-cloudwatch-agent-ctl.ps1\" -a fetch-config -m ec2 -s -c file:{{ config_file_path }}{{ config_file_name }}" # From role vars
+  args:
+    no_profile: yes
+  when: config_file_copy_result.changed
+
+# Registry key required to mitigate issues with the CloudWatch Agent failing to start up, recommended by AWS
+# AWS Reference: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/troubleshooting-CloudWatch-Agent.html#CloudWatch-Agent-troubleshooting-Windows-start
+# Microsoft Reference: https://docs.microsoft.com/en-US/troubleshoot/windows-server/system-management-components/service-not-start-events-7000-7011-time-out-error
+- name: Set ServicesPipeTimeout Registry Key
+  win_regedit:
+    data: 60000
+    name: ServicesPipeTimeout
+    path: HKLM:\SYSTEM\CurrentControlSet\Control
+    state: present
+    type: dword

@@ -1,0 +1,4 @@
+---
+
+# win_copy_src: "{{ file_source_root }}\\agents\\av\\14.3.4615.2000\\SCADA Server\\Published\\"
+win_copy_src: "{{ file_source_root }}\\agents\\crowdstrike\\Falcon\\7.01.17311.0\\Published\\"

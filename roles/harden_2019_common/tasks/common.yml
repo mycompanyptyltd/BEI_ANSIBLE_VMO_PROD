@@ -1,0 +1,343 @@
+---
+
+### Local Administrator Account Configuration ###
+
+# Username from role defaults
+- name: Set Local Administrator Account Username
+  win_shell: |
+    if (Get-LocalUser | Where-Object -FilterScript { $_.Name -eq 'Administrator' }) {
+      Rename-LocalUser -Name 'Administrator' -NewName '{{ local_administrator_name }}'
+      Exit 0
+    }
+
+    Exit 2
+  args:
+    no_profile: yes
+  register: set_local_admin_username_result
+  changed_when: set_local_admin_username_result.rc != 2
+  failed_when:
+    - set_local_admin_username_result.rc != 0
+    - set_local_admin_username_result.rc != 2
+
+### SCHANNEL Configuration ###
+
+- name: Disable Insecure SCHANNEL Protocols
+  win_regedit:
+    data: 0
+    name: Enabled
+    path: HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\{{ item }}\Server
+    state: present
+    type: dword
+  loop: "{{ insecure_schannel_protocols }}"
+
+- name: Disable Insecure SCHANNEL Protocols by Default
+  win_regedit:
+    data: 1
+    name: DisabledByDefault
+    path: HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\{{ item }}\Server
+    state: present
+    type: dword
+  loop: "{{ insecure_schannel_protocols }}"
+
+### Password Complexity Configuration ###
+
+- name: Set Minimum Password Age
+  win_security_policy:
+    key: MinimumPasswordAge
+    section: System Access
+    value: "{{ minimum_password_age }}" # From role defaults
+
+- name: Set Maximum Password Age
+  win_security_policy:
+    key: MaximumPasswordAge
+    section: System Access
+    value: "{{ maximum_password_age }}" # From role defaults
+
+- name: Set Minimum Password Length
+  win_security_policy:
+    key: MinimumPasswordLength
+    section: System Access
+    value: "{{ minimum_password_length }}" # From role defaults
+
+- name: Enable Password Complexity Requirements
+  win_security_policy:
+    key: PasswordComplexity
+    section: System Access
+    value: "{{ password_complexity }}" # From role defaults
+
+- name: Set Password History Size
+  win_security_policy:
+    key: PasswordHistorySize
+    section: System Access
+    value: "{{ password_history_size }}" # From role defaults
+
+- name: Disable Reversible Password Encryption
+  win_security_policy:
+    key: ClearTextPassword
+    section: System Access
+    value: "{{ clear_text_password }}" # From role defaults
+
+### PowerShell Logging Configuration ###
+
+- name: Enable PowerShell Module Logging
+  win_regedit:
+    data: 1
+    name: EnableModuleLogging
+    path: HKLM:\SOFTWARE\Wow6432Node\Policies\Microsoft\Windows\PowerShell\ModuleLogging
+    state: present
+    type: dword
+
+- name: Enable PowerShell Module Logging for All Modules
+  win_regedit:
+    data: "*"
+    name: "*"
+    path: HKLM:\SOFTWARE\Wow6432Node\Policies\Microsoft\Windows\PowerShell\ModuleLogging\ModuleNames
+    state: present
+    type: string
+
+- name: Enable PowerShell Script Block Logging
+  win_regedit:
+    data: 1
+    name: EnableScriptBlockLogging
+    path: HKLM:\SOFTWARE\Wow6432Node\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging
+    state: present
+    type: dword
+
+### Security Auditing Configuration ###
+
+- name: Audit Credential Validation
+  win_audit_policy_system:
+    audit_type:
+      - success
+      - failure
+    subcategory: Credential Validation
+
+- name: Audit Security Group Management
+  win_audit_policy_system:
+    audit_type:
+      - success
+    subcategory: Security Group Management
+
+- name: Audit User Account Management
+  win_audit_policy_system:
+    audit_type:
+      - success
+      - failure
+    subcategory: Security Group Management
+
+- name: Audit Plug and Play Events
+  win_audit_policy_system:
+    audit_type:
+      - success
+    subcategory: Plug and Play Events
+
+- name: Audit Process Creation
+  win_audit_policy_system:
+    audit_type:
+      - success
+    subcategory: Process Creation
+
+- name: Audit Account Lockout
+  win_audit_policy_system:
+    audit_type:
+      - failure
+    subcategory: Account Lockout
+
+- name: Audit Group Membership
+  win_audit_policy_system:
+    audit_type:
+      - success
+    subcategory: Group Membership
+
+- name: Audit Logon
+  win_audit_policy_system:
+    audit_type:
+      - success
+      - failure
+    subcategory: Logon
+
+- name: Audit Other Logon/Logoff Events
+  win_audit_policy_system:
+    audit_type:
+      - success
+      - failure
+    subcategory: Other Logon/Logoff Events
+
+- name: Audit Special Logon
+  win_audit_policy_system:
+    audit_type:
+      - success
+    subcategory: Special Logon
+
+- name: Audit Detailed File Share
+  win_audit_policy_system:
+    audit_type:
+      - failure
+    subcategory: Detailed File Share
+
+- name: Audit File Share
+  win_audit_policy_system:
+    audit_type:
+      - success
+      - failure
+    subcategory: File Share
+
+- name: Audit Other Object Access Events
+  win_audit_policy_system:
+    audit_type:
+      - success
+      - failure
+    subcategory: Other Object Access Events
+
+- name: Audit Removable Storage
+  win_audit_policy_system:
+    audit_type:
+      - success
+      - failure
+    subcategory: Removable Storage
+
+- name: Audit Audit Policy Change
+  win_audit_policy_system:
+    audit_type:
+      - success
+    subcategory: Audit Policy Change
+
+- name: Audit Authentication Policy Change
+  win_audit_policy_system:
+    audit_type:
+      - success
+    subcategory: Authentication Policy Change
+
+- name: Audit MPSSVC Rule-Level Policy Change
+  win_audit_policy_system:
+    audit_type:
+      - success
+      - failure
+    subcategory: MPSSVC Rule-Level Policy Change
+
+- name: Audit Other Policy Change Events
+  win_audit_policy_system:
+    audit_type:
+      - failure
+    subcategory: Other Policy Change Events
+
+- name: Audit Sensitive Privilege Use
+  win_audit_policy_system:
+    audit_type:
+      - success
+      - failure
+    subcategory: Sensitive Privilege Use
+
+- name: Audit Other System Events
+  win_audit_policy_system:
+    audit_type:
+      - success
+      - failure
+    subcategory: Other System Events
+
+- name: Audit Security State Change
+  win_audit_policy_system:
+    audit_type:
+      - success
+    subcategory: Security State Change
+
+- name: Audit Security System Extension
+  win_audit_policy_system:
+    audit_type:
+      - success
+    subcategory: Security System Extension
+
+- name: Audit System Integrity
+  win_audit_policy_system:
+    audit_type:
+      - success
+      - failure
+    subcategory: System Integrity
+
+### LAN Manager Configuration ###
+
+# Reference: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/network-security-lan-manager-authentication-level
+- name: Disable LM and NTLMv1
+  win_regedit:
+    data: 5
+    name: LmCompatibilityLevel
+    path: HKLM:\System\CurrentControlSet\Control\Lsa
+    state: present
+    type: dword
+
+### Logon Banner Configuration ###
+
+- name: Set Logon Banner Caption
+  win_regedit:
+    data: "{{ logon_banner_caption }}" # From role defaults
+    name: LegalNoticeCaption
+    path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System
+    state: present
+    type: string
+
+- name: Set Logon Banner Text
+  win_regedit:
+    data: "{{ logon_banner_text }}" # From role defaults
+    name: LegalNoticeText
+    path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System
+    state: present
+    type: string
+
+### Event Log Size Configuration ###
+
+# Maximum size from role defaults
+- name: Set Event Log Maximum Size
+  win_shell: |
+    $EventLogs = Get-WinEvent -ListLog 'Application','Security','System' | Where-Object -FilterScript { $_.MaximumSizeInBytes -ne {{ maximum_size_in_bytes }} }
+
+    if ($EventLogs) {
+      $EventLogs | ForEach-Object {
+        $_.MaximumSizeInBytes = {{ maximum_size_in_bytes }}
+        $_.SaveChanges()
+      }
+
+      Exit 0
+    }
+
+    Exit 2
+  args:
+    no_profile: yes
+  register: set_event_log_size_result
+  changed_when: set_event_log_size_result.rc != 2
+  failed_when:
+    - set_event_log_size_result.rc != 0
+    - set_event_log_size_result.rc != 2
+
+### CA Certificate Installation ###
+
+- name: Create Temporary Folder
+  win_tempfile:
+    state: directory
+  register: ca_temp_folder
+
+- name: Copy Issuing and Root CA Certificate Files
+  win_copy:
+    src: "{{ item }}"
+    dest: "{{ ca_temp_folder.path }}\\"
+  loop:
+    - "{{ root_ca_file_name }}" # From role vars
+    - "{{ issuing_ca_file_name }}" # From role vars
+
+- name: Install Root CA Certificate
+  win_certificate_store:
+    path: "{{ ca_temp_folder.path }}\\{{ root_ca_file_name }}"
+    state: present
+    store_location: LocalMachine
+    store_name: Root
+
+- name: Install Issuing CA Certificate
+  win_certificate_store:
+    path: "{{ ca_temp_folder.path }}\\{{ issuing_ca_file_name }}"
+    state: present
+    store_location: LocalMachine
+    store_name: CertificateAuthority
+
+- name: Delete Temporary Folder
+  win_file:
+    path: "{{ ca_temp_folder.path }}"
+    state: absent
