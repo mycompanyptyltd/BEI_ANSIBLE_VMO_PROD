@@ -1,7 +1,7 @@
 ---
 
-server_2019_desktop_experience_template: WinServer2019DesktopExperience-PackerBuild
-server_2019_core_template: WinServer2019Core-PackerBuild
+server_2022_desktop_experience_template: Win2022_Std_GUI_Template
+server_2022_core_template: Win2022_Std_Base_Template
 
 vmware_templates_folder: Templates
 vmware_validate_certs: no
