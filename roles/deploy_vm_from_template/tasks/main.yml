@@ -35,7 +35,7 @@
     name: "{{ server_hostname | upper }}" # From workflow survey
     password: "{{ vcenter_password }}" # From workflow survey
     state: poweredon
-    template: "/{{ vcenter_datacenter }}/vm/{{ vmware_templates_folder }}/{{ vm_template }}"
+    template: "/{{ vcenter_datacenter }}/{{ vmware_templates_folder }}/{{ vm_template }}"
     username: "{{ vcenter_username }}" # From workflow survey
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
     wait_for_ip_address: yes
