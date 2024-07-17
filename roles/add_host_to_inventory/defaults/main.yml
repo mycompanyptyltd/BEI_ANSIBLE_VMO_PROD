@@ -1,4 +1,4 @@
 ---
 
-tower_inventory_name: Windows_Server_Builds
+tower_inventory_name: server_builds
 tower_validate_certs: no
