@@ -2,12 +2,12 @@
 
 - name: Set Template for Windows Server 2022 (Desktop Experience)
   set_fact:
-    vm_template: "{{ Win2022_Std_GUI_Template }}" # From role defaults
+    vm_template: "{{ server_2022_desktop_experience_template }}" # From role defaults
   when: selection_vm_os == "Windows Server 2022 Desktop Experience"
 
 - name: Set Template for Windows Server 2022 (Core)
   set_fact:
-    vm_template: "{{ Win2022_Std_Base_Template }}" # From role defaults
+    vm_template: "{{ server_2022_core_template }}" # From role defaults
   when: selection_vm_os == "Windows Server 2022 Core"
 
 - name: Assert that Template is Selected
