@@ -1,6 +1,6 @@
 ---
 
 domain_ou_dn:
-  development: OU=CORP-Servers,DC=corpnet,DC=watercorporation,DC=com,DC=au
-  production: OU=CORP-Servers,DC=corpnet,DC=watercorporation,DC=com,DC=au
-  test: OU=CORP-Servers,DC=corpnet,DC=watercorporation,DC=com,DC=au
+  development: OU=Development Servers,DC=mycompany,DC=net,DC=au
+  production: OU=Production Servers,DC=mycompany,DC=net,DC=au
+  test: OU=Test Servers,DC=mycompany,DC=net,DC=au
