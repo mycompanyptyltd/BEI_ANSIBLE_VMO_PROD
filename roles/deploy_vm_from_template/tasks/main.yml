@@ -31,6 +31,16 @@
       num_cpus: "{{ vm_cpus }}" # From workflow survey
       num_cpu_cores_per_socket: 1
       scsi: lsilogicsas
+    network:
+      connected: true
+      start_connected: true
+      name: "{{ vm_static_portgroup }}" # From workflow survey
+      type: static
+      ip: "{{ static_ip }}" # From workflow survey
+      netmask: "{{ subnet_mask }}" # From workflow survey
+      gateway: "{{ default_gateway }}" # From workflow survey
+      dns_servers: "{{ dns_server_ip }}" # From workflow survey
+      domain: "{{ win_domain_fqdn }}" # From workflow survey
     hostname: "{{ vcenter_server }}" # From workflow survey
     name: "{{ server_hostname | upper }}" # From workflow survey
     password: "{{ vcenter_password }}" # From workflow survey
