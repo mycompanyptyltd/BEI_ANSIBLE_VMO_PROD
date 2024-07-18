@@ -66,9 +66,9 @@
     attributes:
       - name: Server Description
         value: "{{ server_description }}" # From workflow survey
-      - name: Application Custodian
-        value: "{{ custodian }}" # From workflow survey
       - name: Business Custodian
+        value: "{{ custodian }}" # From workflow survey
+      - name: Technical Custodian
         value: "{{ tech_custodian }}" # From workflow survey
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
 
