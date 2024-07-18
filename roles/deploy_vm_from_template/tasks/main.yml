@@ -33,14 +33,14 @@
       scsi: lsilogicsas
     networks:
     - name: "{{ vm_static_portgroup }}" # From workflow survey
-      #connected: true
+      connected: true
       #start_connected: true
-      device_type: vmxnet3
-      type: static
-      ip: "{{ static_ip }}" # From workflow survey
-      netmask: "{{ subnet_mask }}" # From workflow survey
-      gateway: "{{ default_gateway }}" # From workflow survey
-      dns_servers: "{{ dns_server_ip }}" # From workflow survey
+      #device_type: vmxnet3
+      #type: static
+      #ip: "{{ static_ip }}" # From workflow survey
+      #netmask: "{{ subnet_mask }}" # From workflow survey
+      #gateway: "{{ default_gateway }}" # From workflow survey
+      #dns_servers: "{{ dns_server_ip }}" # From workflow survey
       #domain: "{{ win_domain_fqdn }}" # From workflow survey
       wait_for_ip_address: true
       wait_for_ip_address_timeout: 600
