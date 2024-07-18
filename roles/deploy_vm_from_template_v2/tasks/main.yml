@@ -1,0 +1,82 @@
+---
+
+- name: Set Template for Windows Server 2019 (Desktop Experience)
+  set_fact:
+    vm_template: "{{ server_2019_desktop_experience_template }}" # From role defaults
+  when: selection_vm_os == "Windows Server 2019 Desktop Experience"
+
+- name: Set Template for Windows Server 2019 (Core)
+  set_fact:
+    vm_template: "{{ server_2019_core_template }}" # From role defaults
+  when: selection_vm_os == "Windows Server 2019 Core"
+
+- name: Assert that Template is Selected
+  assert:
+    that:
+      - vm_template is defined
+    fail_msg: "No VM template defined, 'selection_vm_os' value '{{ selection_vm_os }}' either unsupported or null."
+
+- name: Deploy VM from Template
+  vmware_guest:
+    cluster: "{{ vcenter_cluster }}" # From workflow survey
+    datacenter: "{{ vcenter_datacenter }}" # From workflow survey
+    datastore: "{{ vm_datastore }}" # From workflow survey
+    folder: "/{{ vcenter_datacenter }}/vm" # From workflow survey
+    hardware:
+      boot_firmware: efi
+      hotadd_cpu: False
+      hotremove_cpu: False
+      hotadd_memory: False
+      memory_mb: "{{ vm_memory }}" # From workflow survey
+      num_cpus: "{{ vm_cpus }}" # From workflow survey
+      num_cpu_cores_per_socket: 1
+      scsi: lsilogicsas
+    hostname: "{{ vcenter_server }}" # From workflow survey
+    name: "{{ server_hostname | upper }}" # From workflow survey
+    password: "{{ vcenter_password }}" # From workflow survey
+    state: poweredon
+    template: "/{{ vcenter_datacenter }}/vm/{{ vmware_templates_folder }}/{{ vm_template }}"
+    username: "{{ vcenter_username }}" # From workflow survey
+    validate_certs: "{{ vmware_validate_certs }}" # From role defaults
+    wait_for_ip_address: yes
+  register: vm_facts_after_build
+  until: vm_facts_after_build.instance.ipv4 is not none
+  retries: 5
+  delay: 2
+
+- name: Set VM Tags
+  vmware_tag_manager:
+    hostname: "{{ vcenter_server }}" # From workflow survey
+    object_name: "{{ server_hostname }}" # From workflow survey
+    object_type: VirtualMachine
+    password: "{{ vcenter_password }}" # From workflow survey
+    state: add
+    tag_names:
+      - "environment:{{ environment_tag[server_environment | lower] }}" # From workflow survey
+    username: "{{ vcenter_username }}" # From workflow survey
+    validate_certs: "{{ vmware_validate_certs }}" # From role defaults
+
+- name: Set VM Annotations
+  vmware_guest_custom_attributes:
+    hostname: "{{ vcenter_server }}" # From workflow survey
+    name: "{{ server_hostname }}" # From workflow survey
+    username: "{{ vcenter_username }}" # From workflow survey
+    password: "{{ vcenter_password }}" # From workflow survey
+    state: present
+    attributes:
+      - name: Server Description
+        value: "{{ server_description }}" # From workflow survey
+      - name: Application Custodian
+        value: "{{ custodian }}" # From workflow survey
+      - name: Business Custodian
+        value: "{{ tech_custodian }}" # From workflow survey
+    validate_certs: "{{ vmware_validate_certs }}" # From role defaults
+
+- name: Set Dynamic IP and MAC Address Stats
+  set_stats:
+    aggregate: yes
+    data:
+      inventory_host_name: "{{ vm_facts_after_build.instance.ipv4 }}"
+      vm_dynamic_ip: "{{ vm_facts_after_build.instance.ipv4 }}"
+      vm_macdaddress: "{{ vm_facts_after_build.instance.hw_eth0.macaddress }}"
+    per_host: no
