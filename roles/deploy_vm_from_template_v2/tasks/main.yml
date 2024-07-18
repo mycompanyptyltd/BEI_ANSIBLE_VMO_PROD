@@ -1,15 +1,15 @@
 
 ---
 
-- name: Set Template for Windows Server 2019 (Desktop Experience)
+- name: Set Template for Windows Server 2022 (Desktop Experience)
   set_fact:
-    vm_template: "{{ server_2019_desktop_experience_template }}" # From role defaults
-  when: selection_vm_os == "Windows Server 2019 Desktop Experience"
+    vm_template: "{{ server_2022_desktop_experience_template }}" # From role defaults
+  when: selection_vm_os == "Windows Server 2022 Desktop Experience"
 
-- name: Set Template for Windows Server 2019 (Core)
+- name: Set Template for Windows Server 2022 (Core)
   set_fact:
-    vm_template: "{{ server_2019_core_template }}" # From role defaults
-  when: selection_vm_os == "Windows Server 2019 Core"
+    vm_template: "{{ server_2022_core_template }}" # From role defaults
+  when: selection_vm_os == "Windows Server 2022 Core"
 
 - name: Assert that Template is Selected
   assert:
