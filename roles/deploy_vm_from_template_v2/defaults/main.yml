@@ -26,7 +26,7 @@ win_domain_admin_user: "Administrator"
 win_domain_admin_password: "Pa55word$$"
 
 build_engineer: "Andrew Campbell"
-tech_custodian: IMS_Wintel
+tech_custodian: "IMS_Wintel"
 server_description: "Test Ansible Build"
 business_custodian: "Water Corp"
 Application Custodian: "Architecture Group"
