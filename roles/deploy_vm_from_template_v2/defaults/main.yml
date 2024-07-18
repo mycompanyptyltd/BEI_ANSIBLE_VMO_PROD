@@ -5,3 +5,28 @@ server_2022_core_template: Win2022_Std_Base_Template
 
 vmware_templates_folder: Templates
 vmware_validate_certs: no
+
+server_hostname: "W2K22-TEST01"
+vcenter_server: "vcsa7-vcent01.mycompany.net.au"
+vcenter_cluster: "esxi7-cluster01.mycompany.net.au"
+vcenter_username: "administrator@vsphere.local"
+vcenter_password: "Bertram2569#$#"
+vcenter_datacenter: "MyCompany-DC01"
+vm_datastore: "VSAN-MGMT"
+vm_static_portgroup: "DPortGroup-Mgmt"
+vm_memory: 2048
+vm_cpus: 2
+
+static_ip: "10.100.1.100/24"
+default_gateway: "10.100.1.2"
+dns_server_ip: "10.100.2.10"
+
+ad_domain: "mycompany"
+win_domain_admin_user: "Administrator"
+win_domain_admin_password: "Pa55word$$"
+
+build_engineer: "Andrew Campbell"
+tech_custodian: IMS_Wintel
+server_description: "Test Ansible Build"
+business_custodian: "Water Corp"
+Application Custodian: "Architecture Group"
