@@ -32,9 +32,9 @@
       num_cpu_cores_per_socket: 1
       scsi: lsilogicsas
     networks:
+    - name: "{{ vm_static_portgroup }}" # From workflow survey
       connected: true
       start_connected: true
-      name: "{{ vm_static_portgroup }}" # From workflow survey
       type: static
       ip: "{{ static_ip }}" # From workflow survey
       netmask: "{{ subnet_mask }}" # From workflow survey
