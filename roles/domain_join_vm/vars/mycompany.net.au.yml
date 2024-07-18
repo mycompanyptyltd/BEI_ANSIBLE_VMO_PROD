@@ -1,1 +1,4 @@
-
+domain_ou_dn:
+  development: OU=Development Servers,DC=mycompany,DC=net,DC=au
+  production: OU=Production Servers,DC=mycompany,DC=net,DC=au
+  test: OU=Test Servers,DC=mycompany,DC=net,DC=au
