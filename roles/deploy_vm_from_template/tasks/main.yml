@@ -31,8 +31,6 @@
       num_cpus: "{{ vm_cpus }}" # From workflow survey
       num_cpu_cores_per_socket: 1
       scsi: lsilogicsas
-    networks:
-    - name: "{{ vm_static_portgroup }}" # From workflow survey
     hostname: "{{ vcenter_server }}" # From workflow survey
     name: "{{ server_hostname | upper }}" # From workflow survey
     password: "{{ vcenter_password }}" # From workflow survey
@@ -40,6 +38,8 @@
     template: "/{{ vcenter_datacenter }}/vm/{{ vmware_templates_folder }}/{{ vm_template }}"
     username: "{{ vcenter_username }}" # From workflow survey
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
+    networks:
+    - name: "{{ vm_static_portgroup }}" # From workflow survey
     wait_for_ip_address: true
   register: vm_facts_after_build
   until: vm_facts_after_build.instance.ipv4 is not none
