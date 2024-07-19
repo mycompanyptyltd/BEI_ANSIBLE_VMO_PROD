@@ -31,6 +31,9 @@
       num_cpus: "{{ vm_cpus }}" # From workflow survey
       num_cpu_cores_per_socket: 1
       scsi: lsilogicsas
+    networks:
+    - name: "{{ vm_static_portgroup }}" # From workflow survey
+      type: dhcp
     hostname: "{{ vcenter_server }}" # From workflow survey
     name: "{{ server_hostname | upper }}" # From workflow survey
     password: "{{ vcenter_password }}" # From workflow survey
