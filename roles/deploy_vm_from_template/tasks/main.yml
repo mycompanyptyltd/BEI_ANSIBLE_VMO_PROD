@@ -31,8 +31,8 @@
       num_cpus: "{{ vm_cpus }}" # From workflow survey
       num_cpu_cores_per_socket: 1
       scsi: lsilogicsas
-      networks:
-        - name: "{{ vm_static_portgroup }}" # From workflow survey
+    networks:
+      - name: "{{ vm_static_portgroup }}" # From workflow survey
           ip: "{{ static_ip }}" # From workflow survey
           netmask: "{{ subnet_mask }}" # From workflow survey
           gateway: "{{ default_gateway }}" # From workflow survey
