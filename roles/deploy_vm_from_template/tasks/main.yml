@@ -39,8 +39,8 @@
     template: "/{{ vcenter_datacenter }}/vm/{{ vmware_templates_folder }}/{{ vm_template }}"
     networks:
     - name: "{{ vm_static_portgroup }}" # From workflow survey
-    ip: "{{ static_ip }}"
     dvswitch_name: DvSwitch01
+    ip: "{{ static_ip }}"
     netmask: "{{ subnet_mask }}"
     gateway: "{{ default_gateway }}"
     connected: True
@@ -86,5 +86,5 @@
     data:
       inventory_host_name: "{{ vm_facts_after_build.instance.ipv4 }}"
       vm_dynamic_ip: "{{ vm_facts_after_build.instance.ipv4 }}"
-     vm_macdaddress: "{{ vm_facts_after_build.instance.hw_eth0.macaddress }}"
+      vm_macdaddress: "{{ vm_facts_after_build.instance.hw_eth0.macaddress }}"
     per_host: no
