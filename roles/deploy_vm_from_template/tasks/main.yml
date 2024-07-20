@@ -38,8 +38,23 @@
     name: "{{ server_hostname | upper }}" # From workflow survey
     state: poweredon
     template: "/{{ vcenter_datacenter }}/vm/{{ vmware_templates_folder }}/{{ vm_template }}"
-    #networks:
-    #- name: "{{ vm_static_portgroup }}" # From workflow survey
+  vmware_guest:
+    hostname: "{{ vcenter_server }}" # From workflow survey
+    cluster: "{{ vcenter_cluster }}" # From workflow survey
+    datacenter: "{{ vcenter_datacenter }}" # From workflow survey
+    datastore: "{{ vm_datastore }}" # From workflow survey
+    folder: "/{{ vcenter_datacenter }}/vm" # From workflow survey
+    username: "{{ vcenter_username }}" # From workflow survey
+    password: "{{ vcenter_password }}" # From workflow survey
+    validate_certs: "{{ vmware_validate_certs }}" # From role defaults
+    networks:
+    - name: "{{ vm_static_portgroup }}" # From workflow survey
+    ip: "{{ static_ip }}"
+    dvswitch_name: DvSwitch01
+    netmask: "{{ subnet_mask }}"
+    gateway: "{{ default_gateway }}"
+    connected: True
+    start_connected : True
     wait_for_ip_address: true
   register: vm_facts_after_build
   until: vm_facts_after_build.instance.ipv4 is not none
