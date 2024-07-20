@@ -38,13 +38,13 @@
     name: "{{ server_hostname | upper }}" # From workflow survey
     template: "/{{ vcenter_datacenter }}/vm/{{ vmware_templates_folder }}/{{ vm_template }}"
     networks:
-    - name: "{{ vm_static_portgroup }}" # From workflow survey
-    dvswitch_name: DvSwitch01
-    ip: "{{ static_ip }}"
-    netmask: "{{ subnet_mask }}"
-    gateway: "{{ default_gateway }}"
-    connected: True
-    start_connected : True
+      - name: "{{ vm_static_portgroup }}" # From workflow survey
+      dvswitch_name: DvSwitch01
+      ip: "{{ static_ip }}"
+      netmask: "{{ subnet_mask }}"
+      gateway: "{{ default_gateway }}"
+      connected: True
+      start_connected : True
     state: poweredon
     wait_for_ip_address: true
   register: vm_facts_after_build
