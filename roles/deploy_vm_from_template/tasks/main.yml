@@ -40,9 +40,9 @@
     networks:
       - name: "{{ vm_static_portgroup }}" # From workflow survey
         dvswitch_name: DvSwitch01
-        ip: "{{ static_ip }}"
-        netmask: "{{ subnet_mask }}"
-        gateway: "{{ default_gateway }}"
+        #ip: "{{ static_ip }}"
+        #netmask: "{{ subnet_mask }}"
+        #gateway: "{{ default_gateway }}"
         connected: True
         start_connected : True
     state: poweredon
