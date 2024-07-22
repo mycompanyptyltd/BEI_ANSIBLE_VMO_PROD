@@ -12,5 +12,5 @@
   hosts: localhost
   roles:
     - role: set_vm_port_group
-      when: vcenter_server != "vcenter.sddc-13-237-161-158.vmwarevmc.com" or 
-            vcenter_server != "vcenter.sddc-13-211-4-132.vmwarevmc.com"
+      when: vcenter_server != "vcsa7-vcent01.mycompany.net.au" or 
+            vcenter_server != "vcsa7-vcent02.mycompany.net.au"
