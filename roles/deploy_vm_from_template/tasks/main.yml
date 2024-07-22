@@ -59,17 +59,17 @@
   #retries: 5
   #delay: 10
 
-#- name: Set VM Tags
-  #vmware_tag_manager:
-    #hostname: "{{ vcenter_server }}" # From workflow survey
-    #username: "{{ vcenter_username }}" # From workflow survey
-    #password: "{{ vcenter_password }}" # From workflow survey
-    #validate_certs: "{{ vmware_validate_certs }}" # From role defaults
-    #object_name: "{{ server_hostname }}" # From workflow survey
-    #object_type: VirtualMachine
-    #state: add
-    #tag_names:
-      #- "environment:{{ environment_tag[server_environment | lower] }}" # From workflow survey
+- name: Set VM Tags
+  vmware_tag_manager:
+    hostname: "{{ vcenter_server }}" # From workflow survey
+    username: "{{ vcenter_username }}" # From workflow survey
+    password: "{{ vcenter_password }}" # From workflow survey
+    validate_certs: "{{ vmware_validate_certs }}" # From role defaults
+    object_name: "{{ server_hostname }}" # From workflow survey
+    object_type: VirtualMachine
+    state: add
+    tag_names:
+      - "environment:{{ environment_tag[server_environment | lower] }}" # From workflow survey
 
 #- name: Set VM Annotations
   #vmware_guest_custom_attributes:
