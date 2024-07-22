@@ -51,27 +51,27 @@
     state: poweredon
     wait_for_ip_address: true
   register: vm_facts_after_build
-- name: Print return information from the previous task
-  ansible.builtin.debug:
-    var: vm_facts_after_build
-    verbosity: 2
+  - name: Print return information from the previous task
+      ansible.builtin.debug:\
+        var: vm_facts_after_build
+        verbosity: 2
   
 
   #until: vm_facts_after_build.instance.ipv4 is not none
   #retries: 5
   #delay: 10
 
-- name: Set VM Tags
-  vmware_tag_manager:
-    hostname: "{{ vcenter_server }}" # From workflow survey
-    username: "{{ vcenter_username }}" # From workflow survey
-    password: "{{ vcenter_password }}" # From workflow survey
-    validate_certs: "{{ vmware_validate_certs }}" # From role defaults
-    object_name: "{{ server_hostname }}" # From workflow survey
-    object_type: VirtualMachine
-    state: add
-    tag_names:
-      - "environment:{{ environment_tag[server_environment | lower] }}" # From workflow survey
+#- name: Set VM Tags
+  #vmware_tag_manager:
+    #hostname: "{{ vcenter_server }}" # From workflow survey
+    #username: "{{ vcenter_username }}" # From workflow survey
+    #password: "{{ vcenter_password }}" # From workflow survey
+    #validate_certs: "{{ vmware_validate_certs }}" # From role defaults
+    #object_name: "{{ server_hostname }}" # From workflow survey
+    #object_type: VirtualMachine
+    #state: add
+    #tag_names:
+      #- "environment:{{ environment_tag[server_environment | lower] }}" # From workflow survey
 
 #- name: Set VM Annotations
   #vmware_guest_custom_attributes:
