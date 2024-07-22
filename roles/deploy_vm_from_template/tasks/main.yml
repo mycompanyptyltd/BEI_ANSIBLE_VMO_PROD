@@ -52,8 +52,7 @@
     wait_for_ip_address: true
   register: vm_facts_after_build
   until: vm_facts_after_build.instance.ipv4 is not none
-  - name: Print return information from the previous task
-      ansible.builtin.debug: 
+    ansible.builtin.debug: 
       msg: "{{ vm_facts_after_build.instance.ipv4 }}"
   retries: 10
   delay: 10
