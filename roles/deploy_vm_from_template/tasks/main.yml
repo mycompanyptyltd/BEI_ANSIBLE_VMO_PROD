@@ -54,9 +54,9 @@
 - name: Print return information from the previous task
   ansible.builtin.debug:
     msg: "{{ vm_facts_after_build.instance.ipv4 }}"
-  #until: vm_facts_after_build.instance.ipv4 is not none
-  #retries: 20
-  #delay: 10
+  until: vm_facts_after_build.instance.ipv4 is not none
+  retries: 20
+   delay: 10
 
 #- name: Set VM Tags
   #vmware_tag_manager:
