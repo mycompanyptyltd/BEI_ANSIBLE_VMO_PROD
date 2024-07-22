@@ -18,7 +18,6 @@
       gateway: "{{ default_gateway }}" # From workflow survey
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
   register: vm_ip_address
-  debug:
     msg: vm_ip_address.instance.ipv4
 
 
