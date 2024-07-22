@@ -1,0 +1,8 @@
+---
+
+- name: Set VM IP Address
+  connection: local
+  gather_facts: no
+  hosts: localhost
+  roles:
+    - role: set_vm_ip_address
