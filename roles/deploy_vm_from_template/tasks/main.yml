@@ -52,10 +52,10 @@
     wait_for_ip_address: true
   register: vm_facts_after_build
   ansible.builtin.debug:
-    msg: vm_facts_after_build.instance.ipv4
-  until: vm_facts_after_build.instance.ipv4 is not none
-  retries: 20
-  delay: 10
+    msg: "{{ vm_facts_after_build.instance.ipv4 }}"
+  #until: vm_facts_after_build.instance.ipv4 is not none
+  #retries: 20
+  #delay: 10
 
 #- name: Set VM Tags
   #vmware_tag_manager:
