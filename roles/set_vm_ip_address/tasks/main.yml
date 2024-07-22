@@ -18,6 +18,7 @@
       gateway: "{{ default_gateway }}" # From workflow survey
     wait_for_ip_address: true
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
+    delegate_to: localhost
     register: vm_ip_address
     shell: echo "Hi! Hellow World"
     #debug:
