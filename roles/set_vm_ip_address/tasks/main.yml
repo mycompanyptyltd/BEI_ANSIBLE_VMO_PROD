@@ -20,8 +20,10 @@
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
     #delegate_to: localhost
   register: vm_ip_address
+  - name: Print return information from the previous task
     ansible.builtin.debug:
-      msg: Hello world
+      var: result
+      verbosity: 2
     #debug:
       #msg: "Hello World"
 
