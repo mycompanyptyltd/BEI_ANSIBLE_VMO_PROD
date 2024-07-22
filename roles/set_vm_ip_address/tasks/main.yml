@@ -20,7 +20,7 @@
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
     #delegate_to: localhost
   register: vm_ip_address
-  shell: echo "Hi! Hellow World"
+    shell: echo "Hi! Hellow World"
     #debug:
       #msg: "Hello World"
 
