@@ -25,6 +25,8 @@
     folder: "/{{ vcenter_datacenter }}/vm" # From workflow survey
     username: "{{ vcenter_username }}" # From workflow survey
     password: "{{ vcenter_password }}" # From workflow survey
+    name: "{{ server_hostname | upper }}" # From workflow survey
+    template: "/{{ vcenter_datacenter }}/vm/{{ vmware_templates_folder }}/{{ vm_template }}"
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
     hardware:
       boot_firmware: efi
@@ -35,19 +37,21 @@
       num_cpus: "{{ vm_cpus }}" # From workflow survey
       num_cpu_cores_per_socket: 1
       scsi: lsilogicsas
-    name: "{{ server_hostname | upper }}" # From workflow survey
-    template: "/{{ vcenter_datacenter }}/vm/{{ vmware_templates_folder }}/{{ vm_template }}"
     networks:
-      - name: "{{ vm_static_portgroup }}" # From workflow survey
-        dvswitch_name: DvSwitch01
-        #ip: "{{ static_ip }}"
-        #netmask: "{{ subnet_mask }}"
-        #gateway: "{{ default_gateway }}"
-        connected: True
-        start_connected : True
+    - name: "{{ vm_static_portgroup }}" # From workflow survey
+      device_type: vmxnet3
+      type: static
+      ip: "{{ static_ip }}" # From workflow survey
+      netmask: "{{ subnet_mask }}" # From workflow survey
+      gateway: "{{ default_gateway }}" # From workflow survey
+      connected: True
+    wait_for_ip_address: true
     state: poweredon
-    #wait_for_ip_address: true
-  #register: vm_facts_after_build
+  register: vm_facts_after_build
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    msg: "{{ vm_facts_after_build.instance.ipv4 }}"
+  
   #until: vm_facts_after_build.instance.ipv4 is not none
   #retries: 5
   #delay: 10
