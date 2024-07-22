@@ -53,7 +53,7 @@
   register: vm_facts_after_build
   until: vm_facts_after_build.instance.ipv4 is not none
     ansible.builtin.debug:
-      msg: "{{ vm_facts_after_build.instance.ipv4 }}"
+      msg: vm_facts_after_build.instance.ipv4
   retries: 20
   delay: 10
 
