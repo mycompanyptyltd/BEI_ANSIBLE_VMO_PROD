@@ -44,6 +44,9 @@
       ip: "{{ static_ip }}" # From workflow survey
       netmask: "{{ subnet_mask }}" # From workflow survey
       gateway: "{{ default_gateway }}" # From workflow survey
+      dns_servers:
+      - 10.100.2.10
+      - 10.101.2.11
       connected: True
     wait_for_ip_address: true
     state: poweredon
