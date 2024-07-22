@@ -23,7 +23,6 @@
       #domain: "{{ win_domain_fqdn }}" # From workflow survey
       wait_for_ip_address: true
       wait_for_ip_address_timeout: 600
-
     state: poweredon
 
     
