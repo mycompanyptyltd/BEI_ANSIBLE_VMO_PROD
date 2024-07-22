@@ -23,7 +23,7 @@
 - name: Print return information from the previous task
   ansible.builtin.debug:
     msg: vm_ip_address.instance.ipv4
-    var: vm_ip_address
-    verbosity: 2
+    #var: vm_ip_address
+    #verbosity: 2
 
 
