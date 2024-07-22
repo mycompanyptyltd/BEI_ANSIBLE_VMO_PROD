@@ -22,7 +22,7 @@
   register: vm_ip_address
 - name: Print return information from the previous task
   ansible.builtin.debug:
-    msg: vm_ip_address.instance.ipv4
+    msg: vm_ip_address.instance.ipv4.gateway
     #var: vm_ip_address
     #verbosity: 2
 
