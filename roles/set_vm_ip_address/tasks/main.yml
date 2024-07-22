@@ -17,6 +17,7 @@
       ip: "{{ static_ip }}" # From workflow survey
       netmask: "{{ subnet_mask }}" # From workflow survey
       gateway: "{{ default_gateway }}" # From workflow survey
+  register: vm_ip_address
 
 
 
