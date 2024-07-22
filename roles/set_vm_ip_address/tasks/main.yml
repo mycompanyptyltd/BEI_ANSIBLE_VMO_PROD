@@ -8,6 +8,7 @@
     datacenter: "{{ vcenter_datacenter }}" # From workflow survey
     datastore: "{{ vm_datastore }}" # From workflow survey
     folder: "/{{ vcenter_datacenter }}/vm" # From workflow survey
+    existing_vm: true
     name: "{{ server_hostname | upper }}" # From workflow survey
     networks:
     - name: "{{ vm_static_portgroup }}" # From workflow survey
