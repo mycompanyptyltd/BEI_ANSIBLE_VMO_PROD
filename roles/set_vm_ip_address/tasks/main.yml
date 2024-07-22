@@ -20,7 +20,8 @@
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
     #delegate_to: localhost
   register: vm_ip_address
-    shell: echo "Hi! Hellow World"
+    ansible.builtin.debug:
+      msg: Hello world
     #debug:
       #msg: "Hello World"
 
