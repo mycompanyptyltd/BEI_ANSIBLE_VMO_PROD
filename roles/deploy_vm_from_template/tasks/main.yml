@@ -51,8 +51,8 @@
     state: poweredon
     wait_for_ip_address: true
   register: vm_facts_after_build
-  until: vm_facts_after_build.instance.ipv4 is not none
-  retries: 20
+  until: vm_facts_after_build.instance.ipv4 == "{{ static_ip }}"
+  retries: 30
   delay: 10
 - name: Print return information from the previous task
   ansible.builtin.debug:
