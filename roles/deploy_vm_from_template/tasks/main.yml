@@ -56,12 +56,14 @@
   #delay: 10
   - debug: msg={{item}}
   loop:
-    - vm_facts_after_build.instance.ipv4
+    - 1
+    - 2
+    - 3
   retries: 30
-  delay: 10
+  #delay: 10
   until: 'vm_facts_after_build.instance.ipv4 == static_ip'
-  retries: 30
-  delay: 10
+  #retries: 30
+  #delay: 10
 
   
 
