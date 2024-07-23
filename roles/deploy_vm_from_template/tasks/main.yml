@@ -54,7 +54,7 @@
   #until: 'vm_facts_after_build.instance.ipv4 == static_ip'
   #retries: 30
   #delay: 10
-  - debug: msg={{item}}
+  - debug: msg={{ item }}
   loop:
     - 1
     - 2
