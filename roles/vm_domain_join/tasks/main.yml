@@ -3,21 +3,22 @@
   include_vars:
     file: "{{ win_domain_fqdn | lower }}.yml" # From workflow survey
 
-- hosts: all
-  collections:
-    - microsoft.ad
+- name: Ensure required PowerShell modules are available
+  win_shell: |
+    Install-Module -Name PSWindowsUpdate -Force -SkipPublisherCheck
+    Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+  become: yes
 
-- name: join host to AD Domain
+- name: Add Windows server to Active Directory
   microsoft.ad.membership:
-    dns_domain_name: "{{ win_domain_fqdn }}" # From workflow survey
-    domain_admin_user: "{{ win_domain_admin_user }}" # From workflow survey
-    domain_admin_password: "{{ win_domain_admin_password }}" # From workflow survey
-    hostname: "{{ server_hostname }}" # From workflow survey
-    domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From var yaml files
+    name: "{{ inventory_hostname }}"
+    domain_admin_user: "{{ win_domain_admin_user }}"
+    domain_admin_password: "{{ win_domain_admin_password }}"
+    domain_name: "{{ win_domain_fqdn }}"
+    organizational_unit: "{{ domain_ou_dn[server_environment | lower] }}"
     state: domain
-    reboot: true
-  register: domain_reg
+  register: domain_join
 
-- name: reboot host after joining workgroup
-  ansible.windows.win_reboot:
-  when: domain_reg.reboot_required
+- name: Reboot the server to complete domain join
+  win_reboot:
+    when: domain_join.reboot_required
