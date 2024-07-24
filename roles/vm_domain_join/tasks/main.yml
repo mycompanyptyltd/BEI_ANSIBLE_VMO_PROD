@@ -3,6 +3,10 @@
   include_vars:
     file: "{{ win_domain_fqdn | lower }}.yml" # From workflow survey
 
+- hosts: all
+  collections:
+    - microsoft.ad
+
 - name: join host to AD Domain
   microsoft.ad.membership:
     dns_domain_name: "{{ win_domain_fqdn }}" # From workflow survey
