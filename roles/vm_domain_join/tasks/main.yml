@@ -12,6 +12,7 @@
     domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From var yaml files
     state: domain
     reboot: true
+  register: workgroup_res
 
 - name: reboot host after joining workgroup
   ansible.windows.win_reboot:
