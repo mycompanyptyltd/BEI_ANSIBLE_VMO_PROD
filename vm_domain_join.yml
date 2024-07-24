@@ -2,7 +2,7 @@
 
 - name: Join Server to AD Domain
   gather_facts: no
-  hosts: "{{ inventory_host_name }}"
+  hosts: "{{ server_hostname }}"
   roles:
     - role: vm_domain_join
       when: win_domain_fqdn != "DMZ"
