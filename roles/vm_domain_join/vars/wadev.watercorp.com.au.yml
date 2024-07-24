@@ -1,0 +1,6 @@
+---
+
+domain_ou_dn:
+  development: OU=CORP-Servers,DC=wadev,DC=watercorp,DC=com,DC=au
+  production: OU=CORP-Servers,DC=wadev,DC=watercorp,DC=com,DC=au
+  test: OU=CORP-Servers,DC=wadev,DC=watercorp,DC=com,DC=au
