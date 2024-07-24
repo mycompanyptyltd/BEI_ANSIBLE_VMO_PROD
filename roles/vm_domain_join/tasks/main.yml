@@ -16,4 +16,3 @@
 - name: reboot host after joining workgroup
   ansible.windows.win_reboot:
   when: workgroup_res.reboot_required
-
