@@ -3,16 +3,17 @@
   include_vars:
     file: "{{ win_domain_fqdn | lower }}.yml" # From workflow survey
 
-- name: Join host to the Active Directory Domain
-  ansible.windows.win_domain_membership:
+- name: Join host to AD Domain with automatic reboot
+  microsoft.ad.membership:
     domain_admin_user: "{{ win_domain_admin_user }}" # From workflow survey
     domain_admin_password: "{{ win_domain_admin_password }}" # From workflow survey
     dns_domain_name: "{{ win_domain_fqdn }}" # From workflow survey
     hostname: "{{ server_hostname }}" # From workflow survey
     domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From var yaml files
     state: domain
-    register: domain_state
+    reboot: true
 
-- name: Reboot host after domain join
+- name: reboot host after joining workgroup
   ansible.windows.win_reboot:
-  when: domain_state.reboot_required
+  when: workgroup_res.reboot_required
+
