@@ -1,7 +1,7 @@
 ---
-#- name: Include Variables for Domains
-  #include_vars:
-    #file: "{{ win_domain_fqdn | lower }}.yml" # From workflow survey
+- name: Include Variables for Domains
+  include_vars:
+    file: "{{ win_domain_fqdn | lower }}.yml" # From workflow survey
 
 - name: join host to AD Domain
   membership:
