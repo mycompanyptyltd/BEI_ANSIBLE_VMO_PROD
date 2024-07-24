@@ -9,8 +9,7 @@
     domain_admin_user: "{{ win_domain_admin_user }}" # From workflow survey
     domain_admin_password: "{{ win_domain_admin_password }}" # From workflow survey
     hostname: "{{ server_hostname }}" # From workflow survey
-    #domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From var yaml files
-    domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From workflow survey
+    domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From var yaml files
     state: domain
     reboot: true
   register: domain_reg
