@@ -50,6 +50,8 @@
       connected: True
     state: poweredon
     wait_for_ip_address: true
+    customization:
+      hostname:  "{{ server_hostname }}"
   register: vm_facts_after_build
   until: 'vm_facts_after_build.instance.ipv4 == static_ip'
   retries: 30
