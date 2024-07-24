@@ -4,7 +4,7 @@
     file: "{{ win_domain_fqdn | lower }}.yml" # From workflow survey
 
 - name: join host to AD Domain
-  membership:
+  microsoft.ad.membership:
     dns_domain_name: "{{ win_domain_fqdn }}" # From workflow survey
     domain_admin_user: "{{ win_domain_admin_user }}" # From workflow survey
     domain_admin_password: "{{ win_domain_admin_password }}" # From workflow survey
