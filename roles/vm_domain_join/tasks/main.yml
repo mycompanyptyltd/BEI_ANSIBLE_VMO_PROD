@@ -10,7 +10,7 @@
     domain_admin_password: "{{ win_domain_admin_password }}" # From workflow survey
     hostname: "{{ server_hostname }}" # From workflow survey
     #domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From var yaml files
-    domain_ou_path: OU=Production-Servers,DC=mycompany,DC=net,DC=au
+    domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From workflow survey
     state: domain
     reboot: true
   register: domain_reg
