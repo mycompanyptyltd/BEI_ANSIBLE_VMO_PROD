@@ -1,15 +1,15 @@
 ---
 - name: Include Variables for Domains
   include_vars:
-    file: "{{ win_domain_fqdn | lower }}.yml"  # From workflow survey
+    file: "{{ win_domain_fqdn | lower }}.yml" # From workflow survey
 
 - name: Join host to the Active Directory Domain
   ansible.windows.win_domain_membership:
-    dns_domain_name: "{{ win_domain_fqdn }}"
-    hostname: "{{ server_hostname }}"
-    domain_admin_user: "{{ win_domain_admin_user }}"
-    domain_admin_password: "{{ win_domain_admin_password }}"
-    domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}"
+    domain_admin_user: "{{ win_domain_admin_user }}" # From workflow survey
+    domain_admin_password: "{{ win_domain_admin_password }}" # From workflow survey
+    dns_domain_name: "{{ win_domain_fqdn }}" # From workflow survey
+    hostname: "{{ server_hostname }}" # From workflow survey
+    domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From var yaml files
     state: domain
     register: domain_state
 
