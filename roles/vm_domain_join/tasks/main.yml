@@ -3,12 +3,6 @@
   include_vars:
     file: "{{ win_domain_fqdn | lower }}.yml" # From workflow survey
 
-- name: Ensure required PowerShell modules are available
-  win_shell: |
-    Install-Module -Name PSWindowsUpdate -Force -SkipPublisherCheck
-    Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
-  become: yes
-
 - name: Add Windows server to Active Directory
   microsoft.ad.membership:
     name: "{{ inventory_hostname }}"
