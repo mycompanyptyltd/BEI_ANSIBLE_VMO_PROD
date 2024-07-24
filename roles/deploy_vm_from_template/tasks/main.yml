@@ -63,7 +63,7 @@
     username: "{{ vcenter_username }}" # From workflow survey
     password: "{{ vcenter_password }}" # From workflow survey
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
-    object_name: "{{ [server_hostname | upper] }}" # From workflow survey
+    object_name: "{{ server_hostname | upper }}" # From workflow survey
     object_type: VirtualMachine
     state: add
     tag_names:
