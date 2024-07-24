@@ -1,22 +1,14 @@
 ---
-
-- name: Include Variables for Domain
-  include_vars:
-    file: "{{ win_domain_fqdn | lower }}.yml"  # From workflow survey
-
-- name: Join Server to Domain
-  win_domain_membership:
-    domain_admin_user: "{{ win_domain_admin_user }}@{{ win_domain_fqdn }}" # From workflow survey
-    domain_admin_password: "{{ win_domain_admin_password }}" # From workflow survey
-    dns_domain_name: "{{ win_domain_fqdn }}" # From workflow survey
-    domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From workflow survey
-    hostname: "{{ server_hostname | upper }}" # From workflow survey
+- name: Join host to the Active Directory Domain
+  ansible.windows.win_domain_membership:
+    dns_domain_name: "{{ win_domain_fqdn }}"
+    hostname: "{{ server_hostname }}"
+    domain_admin_user: "{{ win_domain_admin_user }}"
+    domain_admin_password: "{{ win_domain_admin_password }}"
+    domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}"
     state: domain
-  register: domain_membership_result
-  retries: 5
-  delay: 3
+    register: domain_state
 
-- name: Reboot VM if Required
-  win_reboot:
-    pre_reboot_delay: 0
-  when: domain_membership_result.reboot_required
+- name: Reboot host after domain join
+  ansible.windows.win_reboot:
+  when: domain_state.reboot_required
