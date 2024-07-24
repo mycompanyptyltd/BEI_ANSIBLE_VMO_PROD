@@ -1,6 +1,0 @@
----
-
-environment_tag:
-  development: development
-  production: prod
-  test: test
