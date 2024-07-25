@@ -84,14 +84,14 @@
       - name: Technical Custodian
         value: "{{ tech_custodian }}" # From workflow survey
 
-- name: Set Dynamic IP and MAC Address Stats
+- name: Set Post Server Build Facts
   set_stats:
     aggregate: yes
     data:
-      #inventory_host_name: "{{ vm_facts_after_build.instance.customization.hostname }}"
-      #vm_port_group: "{{ vm_facts_after_build.instance.networks.name }}"
+      inventory_host_name: "{{ vm_facts_after_build.invocation.module_args.customization.hostname }}"
+      vm_port_group: "{{ vm_facts_after_build.invocation.module_args.networks.name }}"
       vm_static_ip: "{{ vm_facts_after_build.instance.ipv4 }}"
-      #vm_subnet_mask: "{{ vm_facts_after_build.instance.networks.netmask }}"
-      #vm_gateway: "{{ vm_facts_after_build.instance.networks.gateway }}"
-      #vm_macdaddress: "{{ vm_facts_after_build.instance.hw_eth0.macaddress }}"
+      vm_subnet_mask: "{{ vm_facts_after_build.invocation.module_args.networks.netmask }}"
+      vm_gateway: "{{ vm_facts_after_build.invocation.module_args.networks.gateway }}"
+      vm_macdaddress: "{{ vm_facts_after_build.instance.hw_eth0.macaddress }}"
     per_host: no
