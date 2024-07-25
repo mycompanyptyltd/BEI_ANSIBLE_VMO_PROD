@@ -88,7 +88,7 @@
   set_stats:
     aggregate: yes
     data:
-      #inventory_host_name: "{{ vm_facts_after_build.invocation.module_args.customization.hostname }}"
+      inventory_host_name: "{{ vm_facts_after_build.invocation.module_args.customization.hostname }}"
       #vm_port_group: "{{ vm_facts_after_build.invocation.module_args.networks.name }}"
       vm_static_ip: "{{ vm_facts_after_build.instance.ipv4 }}"
       #vm_subnet_mask: "{{ vm_facts_after_build.invocation.module_args.networks.netmask }}"
