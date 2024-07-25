@@ -8,7 +8,6 @@
     description: Temporary inventory host for server build
     inventory: "{{ tower_inventory_name }}" # From role defaults
     state: present
-    
     validate_certs: "{{ tower_validate_certs }}" # From role defaults
     
     
