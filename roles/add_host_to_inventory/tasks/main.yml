@@ -2,7 +2,7 @@
 
 - name: Add Host to Temporary Inventory
   tower_host:
-    name: "{{ inventory_host_name }}" # From preceding roles or survey
+    name: "{{ server_hostname }}" # From preceding roles or survey
     description: Temporary inventory host for server build
     inventory: "{{ tower_inventory_name }}" # From role defaults
     state: present
