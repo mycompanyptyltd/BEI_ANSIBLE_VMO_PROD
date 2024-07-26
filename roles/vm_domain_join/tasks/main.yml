@@ -1,6 +1,6 @@
 ---
 
-- hosts: all
+- name: Include Microsoft Module
   collections:
     - microsoft.ad
     
