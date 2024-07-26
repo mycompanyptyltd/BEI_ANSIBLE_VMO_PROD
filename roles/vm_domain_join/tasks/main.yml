@@ -1,9 +1,4 @@
----
-
-- name: Include Microsoft Module
-  collections:
-    - microsoft.ad
-    
+--- 
 - name: Include Variables for Domains
   include_vars:
     file: "{{ win_domain_fqdn | lower }}.yml" # From workflow survey
