@@ -1,0 +1,6 @@
+---
+collections:
+  # Install a collection from Ansible Galaxy.
+  - name: microsoft.ad
+    version: 1.6.0
+    source: https://github.com/ansible-collections/microsoft.ad.git
