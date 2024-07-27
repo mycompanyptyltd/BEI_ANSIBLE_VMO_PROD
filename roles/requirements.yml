@@ -1,1 +1,4 @@
-
+---
+- src: https://github.com/ansible-collections/microsoft.ad.git
+  version: 1.6.0
+  name: microsoft.ad
