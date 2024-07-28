@@ -7,7 +7,8 @@
   microsoft.ad.membership:
     dns_domain_name: "{{ win_domain_fqdn }}" # From workflow survey
     domain_admin_user: "{{ win_domain_admin_user }}" # From workflow survey
-    domain_admin_password: "{{ win_domain_admin_password }}" # From workflow survey
+    domain_admin_password: Pa55word$$
+    #domain_admin_password: "{{ win_domain_admin_password }}" # From workflow survey
     hostname: "{{ server_hostname }}" # From workflow survey
     domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From var yaml files
     state: domain
