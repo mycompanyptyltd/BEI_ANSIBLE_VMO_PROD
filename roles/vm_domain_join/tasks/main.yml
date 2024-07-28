@@ -6,7 +6,8 @@
 - name: join host to AD Domain
   microsoft.ad.membership:
     dns_domain_name: "{{ win_domain_fqdn }}" # From workflow survey
-    domain_admin_user: "{{ win_domain_admin_user }}" # From workflow survey
+    #domain_admin_user: "{{ win_domain_admin_user }}" # From workflow survey
+    domain_admin_user: Administrator@mycompany.net.au
     domain_admin_password: Pa55word$$
     #domain_admin_password: "{{ win_domain_admin_password }}" # From workflow survey
     hostname: "{{ server_hostname }}" # From workflow survey
