@@ -5,4 +5,4 @@
   hosts: localhost
   roles:
     - role: add_host_to_inventory
-    - role: create_dns_record
+    - role: add_host_to_dns
