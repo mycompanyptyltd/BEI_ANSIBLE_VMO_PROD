@@ -2,6 +2,7 @@
 #  Creating a DNS A and PTR record.
 - name: Create database server record
   community.windows.win_dns_record:
+    computer_name: w2k19-dc01.mycompany.net.au
     name: "{{ server_hostname }}"
     type: "A"
     value: "{{ static_ip }}"c
@@ -9,6 +10,7 @@
 
 - name: Create matching PTR record
   community.windows.win_dns_record:
+    computer_name: w2k19-dc01.mycompany.net.au
     name: "{{ static_ip }}"
     type: "PTR"
     value: "{{ server_hostname }}"
