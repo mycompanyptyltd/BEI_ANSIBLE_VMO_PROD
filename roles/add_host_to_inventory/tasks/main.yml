@@ -10,4 +10,3 @@
     state: present
     validate_certs: "{{ tower_validate_certs }}" # From role defaults
     
-    
