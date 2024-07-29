@@ -1,0 +1,7 @@
+---
+- name: VM Pre Config Tasks
+  connection: local
+  gather_facts: no
+  hosts: localhost
+  roles:
+    - role: add_host_to_inventory
