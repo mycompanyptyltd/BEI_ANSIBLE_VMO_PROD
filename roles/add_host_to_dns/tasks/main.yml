@@ -1,6 +1,6 @@
 ---
 #  Creating a DNS A Record.
-- name: Create database server record
+- name: Create DNS server record
   community.windows.win_dns_record:
     computer_name: w2k19-dc01.mycompany.net.au
     name: "{{ server_hostname }}"
