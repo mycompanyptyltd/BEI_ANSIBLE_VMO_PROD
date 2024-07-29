@@ -2,16 +2,14 @@
 #  Creating a DNS A Record.
 - name: Create DNS server record
   community.windows.win_dns_record:
-    computer_name: w2k19-dc01.mycompany.net.au
-    name: "{{ server_hostname }}"
+    name: W2K22-TEST10
     type: "A"
-    value: "{{ static_ip }}"
-    zone: "{{ win_domain_fqdn }}"
+    value: 10.100.1.10
+    zone: mycompany.net.au
 
 - name: Create matching DNS PTR record
   community.windows.win_dns_record:
-    computer_name: w2k19-dc01.mycompany.net.au
-    name: "{{ static_ip }}"
+    name: 10.100.1.10
     type: "PTR"
-    value: "{{ server_hostname }}"
+    value: W2K22-TEST10
     zone: "1.100.10.in-addr.arpa"
