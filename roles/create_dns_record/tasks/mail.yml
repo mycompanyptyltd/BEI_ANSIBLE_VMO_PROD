@@ -1,5 +1,5 @@
 ---
-#  Creating a DNS A and PTR record.
+#  Creating a DNS A Record.
 - name: Create database server record
   community.windows.win_dns_record:
     computer_name: w2k19-dc01.mycompany.net.au
@@ -8,7 +8,7 @@
     value: "{{ static_ip }}"c
     zone: "{{ win_domain_fqdn }}"
 
-- name: Create matching PTR record
+- name: Create matching DNS PTR record
   community.windows.win_dns_record:
     computer_name: w2k19-dc01.mycompany.net.au
     name: "{{ static_ip }}"
