@@ -5,7 +5,7 @@
     computer_name: w2k19-dc01.mycompany.net.au
     name: "{{ server_hostname }}"
     type: "A"
-    value: "{{ static_ip }}"c
+    value: "{{ static_ip }}"
     zone: "{{ win_domain_fqdn }}"
 
 - name: Create matching DNS PTR record
