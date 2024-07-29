@@ -9,7 +9,7 @@
 
 - name: Create matching PTR record
   community.windows.win_dns_record:
-    name: "{{ static_ip }}"c
+    name: "{{ static_ip }}"
     type: "PTR"
     value: "{{ server_hostname }}"
     zone: "1.100.10.in-addr.arpa"
