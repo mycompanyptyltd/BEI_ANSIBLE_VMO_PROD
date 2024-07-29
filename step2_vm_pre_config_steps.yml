@@ -2,7 +2,7 @@
 - name: VM Pre Config Tasks
   connection: local
   gather_facts: no
-  hosts: DNS Servers
+  hosts: DNS_Servers
   roles:
     - role: add_host_to_inventory
     - role: add_host_to_dns
