@@ -2,7 +2,7 @@
 - name: VM Pre Config Tasks
   connection: local
   gather_facts: no
-  hosts: "{{ server_hostname }}"
+  hosts: w2k19-dc01.mycompany.net.au
   roles:
     - role: add_host_to_inventory
     - role: add_host_to_dns
