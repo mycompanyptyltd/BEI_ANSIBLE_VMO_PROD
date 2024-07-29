@@ -1,0 +1,7 @@
+---
+- name: VM Pre Config Tasks
+  connection: local
+  gather_facts: no
+  hosts: "{{ server_hostname }}"
+  roles:
+    - role: configure_winrm
