@@ -1,6 +1,7 @@
 ---
 #  Creating a DNS A Record.
 - name: Create database server record
+  hosts: "{{ server_hostname }}"
   community.windows.win_dns_record:
     computer_name: w2k19-dc01.mycompany.net.au
     name: "{{ server_hostname }}"
@@ -9,6 +10,7 @@
     zone: "{{ win_domain_fqdn }}"
 
 - name: Create matching DNS PTR record
+  hosts: "{{ server_hostname }}"
   community.windows.win_dns_record:
     computer_name: w2k19-dc01.mycompany.net.au
     name: "{{ static_ip }}"
