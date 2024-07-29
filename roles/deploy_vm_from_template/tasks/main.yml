@@ -53,7 +53,7 @@
       hostname: "{{ server_hostname }}" # From workflow survey
   register: vm_facts_after_build
   until: 'vm_facts_after_build.instance.ipv4 == static_ip'
-  retries: 30
+  retries: 50
   delay: 10
   
 - name: Set VM Tags
