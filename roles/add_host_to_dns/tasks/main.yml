@@ -11,5 +11,5 @@
   community.windows.win_dns_record:
     name: 10
     type: "PTR"
-    value: "{{ server_hostname }}
+    value: "{{ server_hostname }}"
     zone: "1.100.10.in-addr.arpa"
