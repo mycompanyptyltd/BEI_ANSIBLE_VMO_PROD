@@ -2,7 +2,7 @@
 ---
 - name: Build VM from Template
   connection: local
-  gather_facts: no
+  gather_facts: yes
   hosts: localhost
   roles:
     - role: deploy_vm_from_template
