@@ -1,5 +1,5 @@
 ---
-server_2022_desktop_experience_template: Win2022_Std_GUI_Template
+server_2022_desktop_experience_template: Win2022_Std_GUI_Template_0_1
 server_2022_core_template: Win2022_Std_Base_Template
 
 vmware_templates_folder: Templates
