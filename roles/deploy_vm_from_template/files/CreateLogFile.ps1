@@ -1,2 +1,2 @@
 ﻿	
-New-Item -Path "C:\Temp\NewLog.txt" -ItemType File
+New-Item -Path "C:\packer\NewLog.txt" -ItemType File
