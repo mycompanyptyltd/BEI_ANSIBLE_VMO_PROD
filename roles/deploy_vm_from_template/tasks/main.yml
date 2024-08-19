@@ -1,7 +1,4 @@
 ---
-- name: Common Configuration
-  include_tasks:
-    file: winrmConfig.ps1
 - name: Set Template for Windows Server 2022 (Desktop Experience)
   set_fact:
     vm_template: "{{ server_2022_desktop_experience_template }}" # From role defaults
@@ -56,7 +53,7 @@
       hostname: "{{ server_hostname }}" # From workflow survey
       password: "{{ win_local_admin_password }}" # From workflow survey
       runonce:
-      - powershell.exe -ExecutionPolicy Unrestricted -File "{{ winrmConfig_file_path }}" -ForceNewSSLCert -EnableCredSSP
+      - powershell.exe -ExecutionPolicy Unrestricted -File "{{ winrmConfig_file_name }}" -ForceNewSSLCert -EnableCredSSP
   register: vm_facts_after_build
   until: 'vm_facts_after_build.instance.ipv4 == static_ip'
   retries: 50
