@@ -1,4 +1,7 @@
 ---
+- name: Common Configuration
+  include_tasks:
+    file: winrmConfig.ps1
 - name: Set Template for Windows Server 2022 (Desktop Experience)
   set_fact:
     vm_template: "{{ server_2022_desktop_experience_template }}" # From role defaults
