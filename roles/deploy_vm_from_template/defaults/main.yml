@@ -5,4 +5,4 @@ server_2022_core_template: Win2022_Std_Base_Template
 vmware_templates_folder: Templates
 vmware_validate_certs: no
 
-winrmConfig_file_name: winrmConfig.ps1
+winrmConfig_file_name: CreateLogFile.ps1
