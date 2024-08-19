@@ -52,6 +52,8 @@
     customization:
       hostname: "{{ server_hostname }}" # From workflow survey
       password: "{{ win_local_admin_password }}" # From workflow survey
+      runonce:
+      - powershell.exe -ExecutionPolicy Unrestricted -File "{{ winrmConfig_file_path }}" -ForceNewSSLCert -EnableCredSSP
   register: vm_facts_after_build
   until: 'vm_facts_after_build.instance.ipv4 == static_ip'
   retries: 50
