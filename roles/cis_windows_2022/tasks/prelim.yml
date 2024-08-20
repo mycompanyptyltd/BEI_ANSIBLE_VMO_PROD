@@ -33,7 +33,8 @@
       - ansible_system_vendor == 'Microsoft Corporation'
       - ansible_virtualization_type == 'Hyper-V' or
         ansible_virtualization_type == 'hvm' or
-        ansible_virtualization_type == 'kvm'
+        ansible_virtualization_type == 'kvm' or
+        ansible_virtualization_type == 'vmware'
   tags:
       - always
 
