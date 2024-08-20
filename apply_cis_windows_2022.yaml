@@ -1,0 +1,7 @@
+---
+
+- name: Apply CIS Windows Server 2022 Lockdown Policy
+  gather_facts: no
+  hosts: "{{ server_hostname }}"
+  roles:
+    - role: cis_windows_2022
