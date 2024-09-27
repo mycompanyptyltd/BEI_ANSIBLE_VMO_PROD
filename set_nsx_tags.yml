@@ -1,1 +1,7 @@
-
+---
+- name: Set NSX Tags
+  connection: local
+  gather_facts: no
+  hosts: w2k19-dc01.mycompany.net.au
+  roles:
+    - role: set_nsx_tags
