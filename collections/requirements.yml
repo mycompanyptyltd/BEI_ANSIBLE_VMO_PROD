@@ -2,4 +2,4 @@
 collections:
   - name: microsoft.ad
   - name: community.windows
-  - name: vmware.ansible_for_nsxt:1.0.0
+  - name: vmware.ansible_for_nsxt
