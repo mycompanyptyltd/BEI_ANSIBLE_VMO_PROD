@@ -3,8 +3,8 @@
     - name: Update Tags on VMs
       vmware.ansible_for_nsxt.nsxt_vm_tags:
         hostname: "default"
-        nsx_cert_path: /root/com.vmware.nsx.ncp/nsx.crt
-        nsx_key_path: /root/com.vmware.nsx.ncp/nsx.key
+        username: admin
+        password: nsx-admin-password
         validate_certs: True
         ca_path: /path/to/my/ca-bundle
         virtual_machine_display_name: App-VM-1
