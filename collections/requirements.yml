@@ -2,5 +2,5 @@
 collections:
   - name: microsoft.ad
   - name: community.windows
-  - name: vmware.ansible_for_nsxt --no-cache
+  - name: vmware.ansible_for_nsxt
     
