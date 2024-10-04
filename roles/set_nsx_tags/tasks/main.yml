@@ -2,17 +2,17 @@
   tasks:
     - name: Update Tags on VMs
       vmware.ansible_for_nsxt.nsxt_vm_tags:
-        hostname: "default"
+        hostname: "nsxt-mgr02.mycompany.net.au"
         username: admin
         password: "{{ nsx-admin-password }}"
-        validate_certs: True
-        ca_path: /path/to/my/ca-bundle
-        virtual_machine_display_name: App-VM-1
+        validate_certs: false
+        #ca_path: /path/to/my/ca-bundle
+        virtual_machine_display_name: cent9-test-200.mycompany.net.au
         remove_other_tags: False
         add_tags:
           - scope: "my-scope"
             tag: "my-tag"
           # - scope: "my-scope1"
           #   tag: "my-tag"
-        remove_tags_with_scope:
-          - my-scope1
+        #remove_tags_with_scope:
+          #- my-scope1
