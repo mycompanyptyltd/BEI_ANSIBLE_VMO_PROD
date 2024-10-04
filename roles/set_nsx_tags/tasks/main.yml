@@ -1,4 +1,4 @@
-- hosts: localhost
+- hosts: nsxt-mgr02.mycompany.net.au
   tasks:
     - name: Update Tags on VMs
       vmware.ansible_for_nsxt.nsxt_vm_tags:
