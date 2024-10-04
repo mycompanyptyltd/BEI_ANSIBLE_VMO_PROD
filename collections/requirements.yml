@@ -2,5 +2,5 @@
 collections:
   - name: microsoft.ad
   - name: community.windows
-  - name: vmware.ansible_for_nsxt
-    version: 'v3.2.0'
+  - name: /root/.ansible/collections/ansible_collections/vmware.ansible_for_nsxt
+    
