@@ -1,4 +1,7 @@
 ---
+#-----------------------------------------------------------------------------------------------------------------------
+#Select the Template for Windows Server 2022 from Survey workflow
+#-----------------------------------------------------------------------------------------------------------------------
 - name: Set Template for Windows Server 2022 (Desktop Experience)
   set_fact:
     vm_template: "{{ server_2022_desktop_experience_template }}" # From role defaults
@@ -14,7 +17,28 @@
     that:
       - vm_template is defined
     fail_msg: "No VM template defined, 'selection_vm_os' value '{{ selection_vm_os }}' either unsupported or null."
+#-----------------------------------------------------------------------------------------------------------------------
+#Select the Platform from the Survey workflow
+#-----------------------------------------------------------------------------------------------------------------------
+- name: Set the VMware VMO Platform
+  set_fact:
+    vcenter_server: "{{ vcenter_server_vmo_prod }}" # From role defaults
+  when: selection_vm_platform == "VMware VMO Production"
 
+  #Select the Platform from the Survey workflow
+- name: Set the VMware VMC Platform
+  set_fact:
+    vcenter_server: "{{ vcenter_server_vmc_prod }}" # From role defaults
+  when: selection_vm_platform == "VMware VMC Production"
+
+  - name: Assert that Platform is Selected
+  assert:
+    that:
+      - vcenter_server is defined
+    fail_msg: "No VM platform defined, 'selection_vm__platform' value '{{ selection_vm__platform }}' either unsupported or null."
+#-----------------------------------------------------------------------------------------------------------------------
+#Deploy VM Template
+#-----------------------------------------------------------------------------------------------------------------------
 - name: Deploy VM from Template
   vmware_guest:
     hostname: "{{ vcenter_server }}" # From workflow survey
