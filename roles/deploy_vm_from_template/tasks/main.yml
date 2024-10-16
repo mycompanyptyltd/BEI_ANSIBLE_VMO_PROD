@@ -23,14 +23,14 @@
 - name: Set the VMware VMO Platform
   set_fact:
     vcenter_server: "{{ vcenter_server_vmo_prod }}" # From role defaults
-    #vcenter_datacenter: "{{ vcenter_datacenter_vmo_prod }}" # From role defaults
+    vcenter_datacenter: "{{ vcenter_datacenter_vmo_prod }}" # From role defaults
   when: selection_vm_platform == "VMware VMO Production"
 
   #Select the Platform from the Survey workflow
 - name: Set the VMware VMC Platform
   set_fact:
     vcenter_server: "{{ vcenter_server_vmc_prod }}" # From role defaults
-    #vcenter_datacenter: "{{ vcenter_datacenter_vmc_prod }}" # From role defaults
+    vcenter_datacenter: "{{ vcenter_datacenter_vmc_prod }}" # From role defaults
   when: selection_vm_platform == "VMware VMC Production"
 
 - name: Assert that Platform is Selected
