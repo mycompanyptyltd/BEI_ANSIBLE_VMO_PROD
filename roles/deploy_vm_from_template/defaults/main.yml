@@ -2,6 +2,10 @@
 server_2022_desktop_experience_template: Win2022_Std_GUI_Template_0_1
 server_2022_core_template: Win2022_Std_Base_Template
 
+vcenter_server_vmo_prod: vcsa7-vcent01.mycompany.net.au
+vcenter_server_vmc_prod: vcsa7-vcent02.mycompany.net.au
+vcenter_server_vmc_nonprod: vcsa7-vcent02.mycompany.net.au
+
 vmware_templates_folder: Templates
 vmware_validate_certs: no
 
