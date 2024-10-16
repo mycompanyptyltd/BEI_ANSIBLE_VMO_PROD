@@ -31,7 +31,7 @@
     vcenter_server: "{{ vcenter_server_vmc_prod }}" # From role defaults
   when: selection_vm_platform == "VMware VMC Production"
 
-  - name: Assert that Platform is Selected
+- name: Assert that Platform is Selected
   assert:
     that:
       - vcenter_server is defined
