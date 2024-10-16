@@ -35,7 +35,7 @@
   assert:
     that:
       - vcenter_server is defined
-    fail_msg: "No VM platform defined, 'selection_vm__platform' value '{{ selection_vm__platform }}' either unsupported or null."
+    fail_msg: "No VM platform defined, 'selection_vm_platform' value '{{ selection_vm_platform }}' either unsupported or null."
 #-----------------------------------------------------------------------------------------------------------------------
 #Deploy VM Template
 #-----------------------------------------------------------------------------------------------------------------------
