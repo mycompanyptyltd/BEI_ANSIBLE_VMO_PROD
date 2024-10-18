@@ -8,4 +8,7 @@ vmware_validate_certs: no
 vcenter_server_dc1: vcsa7-vcent01.mycompany.net.au
 vcenter_server_dc2: vcsa7-vcent02.mycompany.net.au
 
+vcenter_cluster_dc1: esxi7-cluster01.mycompany.net.au
+vcenter_cluster_dc2: esxi7-cluster02.mycompany.net.au
+
 winrmConfig_file_name: \\W2k19-dc01\software\Windows_Server\Packer\vmware-WindowsServer2022\setup\CreateLogFile.ps1
