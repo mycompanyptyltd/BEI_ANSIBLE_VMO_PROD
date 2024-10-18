@@ -8,6 +8,9 @@ vmware_validate_certs: no
 vcenter_server_dc1: vcsa7-vcent01.mycompany.net.au
 vcenter_server_dc2: vcsa7-vcent02.mycompany.net.au
 
+vcenter_datacenter_dc1: MyCompany-DC01
+vcenter_datacenter_dc2: MyCompany-DC02
+
 vcenter_cluster_dc1: esxi7-cluster01.mycompany.net.au
 vcenter_cluster_dc2: esxi7-cluster02.mycompany.net.au
 
