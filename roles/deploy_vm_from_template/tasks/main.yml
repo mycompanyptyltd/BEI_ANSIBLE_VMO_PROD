@@ -24,11 +24,13 @@
 - name: Set vCenter Server DC1 
   set_fact:
     vcenter_server: "{{ vcenter_server_dc1 }}" # From role defaults
+    vcenter_cluster: "{{ vcenter_cluster_dc1 }}" # From role defaults
   when: selection_vm_platform == "VMware DC1 Production"
  
 - name: Set Set vCenter Server DC2
   set_fact:
     vcenter_server: "{{ vcenter_server_dc2 }}" # From role defaults
+    vcenter_cluster: "{{ vcenter_cluster_dc2 }}" # From role defaults
   when: selection_vm_platform == "VMware DC2 Production"
  
 - name: Assert that Template is Selected
