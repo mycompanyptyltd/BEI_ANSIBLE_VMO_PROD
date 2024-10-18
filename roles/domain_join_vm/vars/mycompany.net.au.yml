@@ -3,5 +3,5 @@ domain_ou_dn:
   production: OU=Production-Servers,DC=mycompany,DC=net,DC=au
   test: OU=Test-Servers,DC=mycompany,DC=net,DC=au
 
-win_domain_admin_username: "{{ mycompany_ad_admin_username }}"
-win_domain_admin_password: "{{ mycompany_ad_admin_password }}"
+win_domain_admin_username: "{{ mycompany_ad_admin_username }}" # From Extra Credentials
+win_domain_admin_password: "{{ mycompany_ad_admin_password }}" # From Extra Credentials
