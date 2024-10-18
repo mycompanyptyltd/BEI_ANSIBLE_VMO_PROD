@@ -1,4 +1,3 @@
 ---
 tower_inventory_name: server_builds
-tower_host_name: cent90-awx02.mycompany.net.au
 tower_validate_certs: no
