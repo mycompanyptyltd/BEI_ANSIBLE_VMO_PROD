@@ -2,6 +2,6 @@
 - name: Add Host DNS Record
   connection: local
   gather_facts: no
-  hosts: w2k19-dc01.mycompany.net.au
+  hosts: "{{ DomainController_hostname }}"
   roles:
     - role: add_host_to_dns
