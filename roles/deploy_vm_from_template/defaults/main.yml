@@ -5,4 +5,7 @@ server_2022_core_template: Win2022_Std_Base_Template
 vmware_templates_folder: Templates
 vmware_validate_certs: no
 
+vcenter_server_dc1: vcsa7-vcent01.mycompany.net.au
+vcenter_server_dc2: vcsa7-vcent02.mycompany.net.au
+
 winrmConfig_file_name: \\W2k19-dc01\software\Windows_Server\Packer\vmware-WindowsServer2022\setup\CreateLogFile.ps1
