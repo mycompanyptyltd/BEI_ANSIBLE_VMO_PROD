@@ -2,6 +2,6 @@
 - name: Add Host DNS Record
   connection: local
   gather_facts: no
-  hosts: localhost
+  hosts: w2k19-dc01.mycompany.net.au
   roles:
     - role: add_host_to_dns
