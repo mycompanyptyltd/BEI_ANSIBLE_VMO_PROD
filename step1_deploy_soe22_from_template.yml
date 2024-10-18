@@ -5,4 +5,4 @@
   gather_facts: yes
   hosts: localhost
   roles:
-    - role: deploy_vm_from_template
+    - role: deploy_soe22_from_template
