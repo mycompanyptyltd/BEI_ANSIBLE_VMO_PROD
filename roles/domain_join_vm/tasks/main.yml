@@ -6,7 +6,7 @@
 
 - name: Join Server to Domain
   win_domain_membership:
-    domain_admin_user: "{{ win_domain_admin_user }}@{{ win_domain_fqdn }}" # From workflow survey
+    domain_admin_user: "{{ win_domain_admin_username }}@{{ win_domain_fqdn }}" # From workflow survey
     domain_admin_password: "{{ win_domain_admin_password }}" # From workflow survey
     dns_domain_name: "{{ win_domain_fqdn }}" # From workflow survey
     domain_ou_path: "{{ domain_ou_dn[server_environment | lower] }}" # From workflow survey
