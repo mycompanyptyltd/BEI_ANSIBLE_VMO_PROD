@@ -1,4 +1,7 @@
 ---
+# -------------------------------------------------------------------------------------------------------------------
+# Select Windows Server Core or Desktop Experience
+# -------------------------------------------------------------------------------------------------------------------
 - name: Set Template for Windows Server 2022 (Desktop Experience)
   set_fact:
     vm_template: "{{ server_2022_desktop_experience_template }}" # From role defaults
@@ -14,6 +17,10 @@
     that:
       - vm_template is defined
     fail_msg: "No VM template defined, 'selection_vm_os' value '{{ selection_vm_os }}' either unsupported or null."
+
+# -------------------------------------------------------------------------------------------------------------------
+# Deploy VM from Template
+# -------------------------------------------------------------------------------------------------------------------
  
 - name: Deploy VM from Template
   vmware_guest:
