@@ -21,21 +21,21 @@
 # -------------------------------------------------------------------------------------------------------------------
 # Select Hosting Platform
 # -------------------------------------------------------------------------------------------------------------------
-- name: Set Template for Windows Server 2022 (Desktop Experience)
+- name: Set vCenter Server DC1 
   set_fact:
-    vcenter_server: "{{ server_2022_desktop_experience_template }}" # From role defaults
-  when: selection_vm_os == "Windows Server 2022 Desktop Experience"
+    vcenter_server: "{{ vcenter_server_dc1 }}" # From role defaults
+  when: selection_vm_platform == "VMware DC1 Production"
  
-- name: Set Template for Windows Server 2022 (Core)
+- name: Set Set vCenter Server DC2
   set_fact:
-    vcenter_server: "{{ server_2022_core_template }}" # From role defaults
-  when: selection_vm_os == "Windows Server 2022 Core"
+    vcenter_server: "{{ vcenter_server_dc2 }}" # From role defaults
+  when: selection_vm_platform == "VMware DC2 Production"
  
 - name: Assert that Template is Selected
   assert:
     that:
       - vm_template is defined
-    fail_msg: "No VM template defined, 'selection_vm_os' value '{{ selection_vm_os }}' either unsupported or null."
+    fail_msg: "No vCenter defined, 'selection_vm_platform' value '{{ selection_vm_platform }}' either unsupported or null."
 
 # -------------------------------------------------------------------------------------------------------------------
 # Deploy VM from Template
