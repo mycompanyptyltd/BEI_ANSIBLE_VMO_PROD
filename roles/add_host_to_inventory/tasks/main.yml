@@ -2,8 +2,8 @@
 - name: Add Host to ServerBuild Inventory
   awx.awx.host:
     controller_host: "{{ awx_host_name }}" # From role vars
-    controller_username: admin
-    controller_password: Pa55word$$$
+    controller_username: "{{ awx_admin_username }}"
+    controller_password: "{{ awx_admin_password }}"
     name: "{{ server_hostname }}" # From preceding roles or survey
     description: Temporary inventory host for server build
     inventory: "{{ tower_inventory_name }}" # From role defaults
