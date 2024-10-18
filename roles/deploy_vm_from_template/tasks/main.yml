@@ -62,8 +62,8 @@
 - name: Set VM Tags
   vmware_tag_manager:
     hostname: "{{ vcenter_server }}" # From workflow survey
-    username: "{{ vcenter_username }}" # From workflow survey
-    password: "{{ vcenter_password }}" # From workflow survey
+    username: "{{ vcenter_admin_username }}" # From workflow survey
+    password: "{{ vcenter_admin_password }}" # From workflow survey
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
     object_name: "{{ server_hostname | upper }}" # From workflow survey
     object_type: VirtualMachine
@@ -74,8 +74,8 @@
 - name: Set VM Annotations
   vmware_guest_custom_attributes:
     hostname: "{{ vcenter_server }}" # From workflow survey
-    username: "{{ vcenter_username }}" # From workflow survey
-    password: "{{ vcenter_password }}" # From workflow survey
+    username: "{{ vcenter_admin_username }}" # From workflow survey
+    password: "{{ vcenter_admin_password }}" # From workflow survey
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
     name: "{{ server_hostname }}" # From workflow survey
     state: present
@@ -86,6 +86,8 @@
         value: "{{ custodian }}" # From workflow survey
       - name: Technical Custodian
         value: "{{ tech_custodian }}" # From workflow survey
+      - name: Build Engineer
+        value: "{{ ansible_user }}" # From workflow survey
  
 - name: Set Post Server Build Facts
   set_stats:
