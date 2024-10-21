@@ -54,7 +54,7 @@
     folder: "/{{ vcenter_datacenter }}/vm" # From workflow survey
     username: "{{ vcenter_admin_username }}" # From workflow Credencials
     password: "{{ vcenter_admin_password }}" # From workflow survey
-    name: "{{ server_hostname | lower }}" # From workflow survey
+    name: "{{ server_hostname }}" # From workflow survey
     template: "/{{ vcenter_datacenter }}/vm/{{ vmware_templates_folder }}/{{ vm_template }}"
     validate_certs: "{{ vmware_validate_certs }}" # From role defaults
     hardware:
